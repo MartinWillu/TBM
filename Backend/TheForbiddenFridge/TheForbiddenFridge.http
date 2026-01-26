@@ -1,0 +1,6 @@
+@TheForbiddenFridge_HostAddress = http://localhost:5113
+
+GET {{TheForbiddenFridge_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
