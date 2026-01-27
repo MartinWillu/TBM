@@ -3,9 +3,9 @@ using TheForbiddenFridge.DbContexts;
 using TheForbiddenFridge.Models;
 using TheForbiddenFridge.Repositories;
 
-var builder = WebApplication.CreateBuilder(args);
-
 DotEnv.Load();
+
+var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
@@ -17,6 +17,7 @@ builder.Services.AddScoped<FridgeDbContext>();
 builder.Services.AddScoped<Role>();
 builder.Services.AddScoped<User>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IRoleRepository, RoleRepository>();
 
 
 var app = builder.Build();
