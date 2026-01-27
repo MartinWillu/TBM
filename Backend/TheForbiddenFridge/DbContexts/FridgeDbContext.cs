@@ -8,8 +8,9 @@ public class FridgeDbContext(IConfiguration config) : DbContext
 {
     public DbSet<User> Users { get; set; }
     public DbSet<Role>  Roles { get; set; }
+
+    public DbSet<Store>  Stores { get; set; }
     /*
-    DbSet<Store>  Stores { get; set; }
     DbSet<Grocery>  Groceries { get; set; }
     DbSet<Category> Categories { get; set; }
     */
