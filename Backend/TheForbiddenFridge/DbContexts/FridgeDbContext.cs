@@ -11,9 +11,9 @@ public class FridgeDbContext(IConfiguration config) : DbContext
     
     public DbSet<Store>  Stores { get; set; }
     public DbSet<Grocery>  Groceries { get; set; }
-    /*
-    DbSet<Category> Categories { get; set; }
-    */
+    
+    public DbSet<Category> Categories { get; set; }
+    
     
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {

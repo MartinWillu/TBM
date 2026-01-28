@@ -8,8 +8,10 @@ public class Grocery
     public float OldPrice { get; set; }
     public int Quantity { get; set; } // changed from "Amount" to "Quantity"
     public int StoreId { get; set; }
+    public int CategoryId { get; set; }
 
-    public List<Store> Stores { get; set; } 
+    public List<Store> Stores { get; set; }
+    public List<Category> Categories { get; set; }
     
     public Grocery()
     {
