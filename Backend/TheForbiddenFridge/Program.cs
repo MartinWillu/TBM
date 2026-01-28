@@ -1,14 +1,24 @@
 using dotenv.net;
-
-var builder = WebApplication.CreateBuilder(args);
+using TheForbiddenFridge.DbContexts;
+using TheForbiddenFridge.Models;
+using TheForbiddenFridge.Repositories;
 
 DotEnv.Load();
+
+var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+
+builder.Services.AddScoped<FridgeDbContext>();
+builder.Services.AddScoped<Role>();
+builder.Services.AddScoped<User>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IRoleRepository, RoleRepository>();
+
 
 var app = builder.Build();
 
@@ -25,3 +35,5 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+
