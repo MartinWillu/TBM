@@ -6,6 +6,7 @@ using Microsoft.IdentityModel.Tokens;
 using TheForbiddenFridge.DbContexts;
 using TheForbiddenFridge.Models;
 using TheForbiddenFridge.Repositories;
+using TheForbiddenFridge.Service;
 
 DotEnv.Load();
 
@@ -48,6 +49,7 @@ builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
+builder.Services.AddScoped<JwtIssuerService>();
 builder.Services.AddScoped<FridgeDbContext>();
 builder.Services.AddScoped<Role>();
 builder.Services.AddScoped<User>();
