@@ -2,10 +2,8 @@
 
 namespace TheForbiddenFridge.Repositories;
 
-public interface ICategoryRepository
+
+public interface ICategoryRepository : IRepository<Category, int>
 {
-    public interface ICategoryRepository : IRepository<Category, int>
-    {
-    }
 }
 
