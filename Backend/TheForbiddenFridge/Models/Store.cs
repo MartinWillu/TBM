@@ -9,6 +9,8 @@ public class Store
     public List<Grocery> Groceries { get; set; }
     
     public int GroceryId { get; set; }
+    
+    public int UserId { get; set; }
 
     public Store()
     {
