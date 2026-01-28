@@ -8,6 +8,8 @@ public class User
     
     public int RoleId {get; set;}
     public Role Role {get; set;}
+    
+    public List<Store> Stores {get; set;}
 
     public User()
     {
