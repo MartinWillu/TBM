@@ -39,7 +39,7 @@ builder.Services.AddAuthorizationBuilder()
     .AddPolicy("Admin",
         new AuthorizationPolicyBuilder().AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
             .RequireAuthenticatedUser().Build())
-    .AddPolicy("StoreAdmin",
+    .AddPolicy("StoreOwner",
         new AuthorizationPolicyBuilder().AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
             .RequireAuthenticatedUser().Build());
 

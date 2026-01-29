@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using TheForbiddenFridge.DTOs;
 using TheForbiddenFridge.Models;
 using TheForbiddenFridge.Repositories;
@@ -7,6 +8,7 @@ using TheForbiddenFridge.Service;
 namespace TheForbiddenFridge.Controllers;
 
 [ApiController]
+[AllowAnonymous]
 public class AuthController(IUserRepository userRepository, JwtIssuerService jwtService) : ControllerBase
 {
     [HttpPost]
@@ -18,7 +20,9 @@ public class AuthController(IUserRepository userRepository, JwtIssuerService jwt
         }
         string hashedPassword = BCrypt.Net.BCrypt.HashPassword(register.Password);
         
-        userRepository.Create(new User(register.Username, hashedPassword));
+        var user = new User(register.Username, hashedPassword);
+        user.Role = new Role { Name = "User" };
+        userRepository.Create(user);
         return Ok("created user with username: " + register.Username);
     }
     
@@ -37,7 +41,8 @@ public class AuthController(IUserRepository userRepository, JwtIssuerService jwt
             return Unauthorized("Invalid password");
         }
 
-        var token = jwtService.CreateJwt(user.Id.ToString(), user.Username, new List<string>() { "user" });
+        var token = jwtService.CreateJwt(user.Id.ToString(), user.Username,
+            new List<string>() { user.Role.Name });
         return Ok(token); 
 
 
