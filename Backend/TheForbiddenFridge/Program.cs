@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
 using TheForbiddenFridge.DbContexts;
-using TheForbiddenFridge.Models;
 using TheForbiddenFridge.Repositories;
 using TheForbiddenFridge.Service;
 

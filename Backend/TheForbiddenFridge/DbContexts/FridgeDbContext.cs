@@ -21,7 +21,7 @@ public class FridgeDbContext(IConfiguration config, DbContextOptions<FridgeDbCon
         {
             return;
         }
-        var databaseName = config["DB_NAME"] ?? throw new Exception("Missing environment variable DB_NAME");
+        var databaseName = config["DatabaseName"] ?? throw new Exception("Missing environment variable DB_NAME");
         // Skip Postgres configuration if running in test mode and is a GUID
         if (!string.IsNullOrEmpty(databaseName) && Guid.TryParse(databaseName, out _))
         {

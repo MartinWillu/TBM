@@ -14,7 +14,7 @@ public class FridgeWebApplicationFactory : WebApplicationFactory<Program>
 
     public FridgeWebApplicationFactory()
     {
-        Environment.SetEnvironmentVariable("DB_NAME", _dbName);
+        Environment.SetEnvironmentVariable("DatabaseName", _dbName);
         Environment.SetEnvironmentVariable("JwtKey", "epic-secret-key-for-testing-that-is-long-enough");
         Environment.SetEnvironmentVariable("JwtIssuer", "TestIssuer");
         Environment.SetEnvironmentVariable("JwtAudience", "TestAudience");

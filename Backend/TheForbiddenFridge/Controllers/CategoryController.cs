@@ -1,6 +1,4 @@
-﻿using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TheForbiddenFridge.Models;
 using TheForbiddenFridge.Repositories;
@@ -9,7 +7,7 @@ namespace TheForbiddenFridge.Controllers;
 
 
 [ApiController]
-[Microsoft.AspNetCore.Components.Route("api/[controller]")]
+[Route("api/[controller]")]
 public class CategoryController(ICategoryRepository categoryRepository) : ControllerBase
 {
     [HttpGet]
