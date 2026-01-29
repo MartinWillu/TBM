@@ -1,32 +1,63 @@
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using TheForbiddenFridge.Models;
+using TheForbiddenFridge.DTOs;
 using TheForbiddenFridge.Repositories;
+using TheForbiddenFridge.Service;
 
 namespace TheForbiddenFridge.Controllers;
 
 [ApiController]
-[Route("[controller]")]
-public class UserController(IUserRepository userRepository, IRoleRepository roleRepository) : ControllerBase
+[Route("api/[controller]")]
+public class UserController(IUserRepository userRepository, CryptService cryptService) : ControllerBase
 {
-  
-    [HttpPost]
-    public IActionResult Create(string name)
+    [HttpPut]
+    [Authorize(Roles = "Admin, StoreOwner, User")]
+    public IActionResult Put([FromBody] UserUpdateDTO updatedUser)
     {
-        var role = roleRepository.GetAll().FirstOrDefault(r => r.Name == "User");
-        if (role == null)
+        if (!int.TryParse(User.FindFirstValue(JwtRegisteredClaimNames.Sub), out var userId))
         {
-            role = new Role { Name = "User" };
-            roleRepository.Create(role);
+            return Unauthorized("Invalid user ID in token.");
         }
 
-        var testUser = new User
+        var user = userRepository.GetById(userId);
+        if (user == null)
         {
-            Password = "strong hashed and salted",
-            Username = name,
-            Role = role
-        };
+            return NotFound("User not found.");
+        }
 
-        userRepository.Create(testUser);
-        return Ok("created");
+        if (!string.IsNullOrEmpty(updatedUser.Username))
+        {
+            user.Username = updatedUser.Username;
+        }
+
+        if (!string.IsNullOrEmpty(updatedUser.Password))
+        {
+            user.Password = cryptService.HashPassword(updatedUser.Password);
+        }
+        
+        userRepository.Update(user);
+        return Ok(user);
+    }
+    
+    
+    [HttpDelete]
+    [Authorize(Roles = "Admin, StoreOwner, User")]
+    public IActionResult Delete()
+    {
+        if (!int.TryParse(User.FindFirstValue(JwtRegisteredClaimNames.Sub), out var userId))
+        {
+            return Unauthorized("Invalid user ID in token.");
+        }
+
+        var user = userRepository.GetById(userId);
+        if (user == null)
+        {
+            return NotFound("User not found.");
+        }
+
+        userRepository.Delete(user);
+        return Ok("Deleted user account");
     }
 }
