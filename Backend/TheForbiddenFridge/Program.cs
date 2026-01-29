@@ -33,7 +33,7 @@ builder.Services.AddAuthentication(options =>
 
 
 builder.Services.AddAuthorizationBuilder()
-    .AddDefaultPolicy("User",
+    .AddPolicy("User",
         new AuthorizationPolicyBuilder().AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
             .RequireAuthenticatedUser().Build())
     .AddPolicy("Admin",
@@ -55,6 +55,7 @@ builder.Services.AddScoped<Role>();
 builder.Services.AddScoped<User>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();
+
 
 
 var app = builder.Build();

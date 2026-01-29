@@ -11,6 +11,12 @@ public class User
     
     public List<Store> Stores {get; set;}
 
+    public User(string username, string password)
+    {
+        Username = username;
+        Password = password;
+    }
+
     public User()
     {
         
