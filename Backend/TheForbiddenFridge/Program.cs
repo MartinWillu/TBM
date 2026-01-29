@@ -49,14 +49,13 @@ builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
+builder.Services.AddDbContext<FridgeDbContext>();
+
 builder.Services.AddScoped<JwtIssuerService>();
-builder.Services.AddScoped<FridgeDbContext>();
-builder.Services.AddScoped<Role>();
-builder.Services.AddScoped<User>();
+builder.Services.AddScoped<CryptService>();
+
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();
-
-
 
 var app = builder.Build();
 

@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using TheForbiddenFridge.DbContexts;
 using TheForbiddenFridge.Models;
 
@@ -25,11 +26,11 @@ public class UserRepository(FridgeDbContext fridgeDbContext) : IUserRepository
 
     public User? GetById(int id)
     {
-        return fridgeDbContext.Find<User>(id);
+        return fridgeDbContext.Users.Include(u => u.Role).FirstOrDefault(u => u.Id == id);
     }
 
     public IEnumerable<User> GetAll()
     {
-        return fridgeDbContext.Users;
+        return fridgeDbContext.Users.Include(u => u.Role);
     }
 }
