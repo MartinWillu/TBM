@@ -4,29 +4,37 @@ using TheForbiddenFridge.Models;
 
 namespace TheForbiddenFridge.DbContexts;
 
-public class FridgeDbContext(IConfiguration config) : DbContext
+public class FridgeDbContext(IConfiguration config, DbContextOptions<FridgeDbContext> options) : DbContext(options)
 {
     public DbSet<User> Users { get; set; }
-    public DbSet<Role>  Roles { get; set; }
-    
-    public DbSet<Store>  Stores { get; set; }
-    public DbSet<Grocery>  Groceries { get; set; }
-    
+    public DbSet<Role> Roles { get; set; }
+
+    public DbSet<Store> Stores { get; set; }
+    public DbSet<Grocery> Groceries { get; set; }
+
     public DbSet<Category> Categories { get; set; }
-    
-    
+
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
+        if (optionsBuilder.IsConfigured)
+        {
+            return;
+        }
+        var databaseName = config["DB_NAME"] ?? throw new Exception("Missing environment variable DB_NAME");
+        // Skip Postgres configuration if running in test mode and is a GUID
+        if (!string.IsNullOrEmpty(databaseName) && Guid.TryParse(databaseName, out _))
+        {
+            return;
+        }
+        
         var databaseHost = config["DatabaseHost"] ?? "localhost";
         var databasePort = config["DatabasePort"] ?? "5432";
-        
-        var databaseName = config["DatabaseName"];
-        
         var databaseUsername = config["DatabaseUsername"];
         var databasePassword = config["DatabasePassword"];
         var connString =
             $"Host={databaseHost};Port={databasePort};Username={databaseUsername};Password={databasePassword};Database={databaseName}";
-        
+
         optionsBuilder.UseNpgsql(connString);
     }
 }

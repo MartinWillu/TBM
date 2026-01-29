@@ -2,6 +2,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TheForbiddenFridge", "TheForbiddenFridge\TheForbiddenFridge.csproj", "{8F8177BD-7799-4F5F-B0D6-45E75BECD84C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{EA67C7B3-33BE-401A-89E2-0AD988C05807}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +14,9 @@ Global
 		{8F8177BD-7799-4F5F-B0D6-45E75BECD84C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8F8177BD-7799-4F5F-B0D6-45E75BECD84C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8F8177BD-7799-4F5F-B0D6-45E75BECD84C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EA67C7B3-33BE-401A-89E2-0AD988C05807}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EA67C7B3-33BE-401A-89E2-0AD988C05807}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EA67C7B3-33BE-401A-89E2-0AD988C05807}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EA67C7B3-33BE-401A-89E2-0AD988C05807}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
