@@ -40,7 +40,7 @@ namespace TheForbiddenFridge.Controllers;
         }
         
         [HttpGet]
-        public IActionResult GetAllGrocieresByStoreIdAndCategoryId(int storeId, string categoryName)
+        public IActionResult GetAllGrocieresByStoreIdAndCategoryName(int storeId, string categoryName)
         {
             var store = storeRepository.GetById(storeId);
             if (store == null)
