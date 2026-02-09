@@ -1,4 +1,6 @@
 import { useNavigate } from "react-router"
+import PasswordBox from "../components/PasswordBox"
+import UsernameBox from "../components/UserNameBox"
 
 export function LoginPage() {
     const navigator = useNavigate()
@@ -7,10 +9,17 @@ export function LoginPage() {
         navigator("/");
     }
 
+    const handleRegisterClick = () => {
+        navigator("/register");
+    }
+
     return (
         <>
             <h1>Login</h1>
-            <button onClick={handleClick}>CLICK ME</button>
+            <UsernameBox />
+            <PasswordBox />
+            <button onClick={handleClick}>Login</button>
+            <button onClick={handleRegisterClick}>Register</button>
         </>
     )
 }
