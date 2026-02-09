@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
 using TheForbiddenFridge.DbContexts;
-using TheForbiddenFridge.Models;
 using TheForbiddenFridge.Repositories;
 using TheForbiddenFridge.Service;
 
@@ -39,7 +38,7 @@ builder.Services.AddAuthorizationBuilder()
     .AddPolicy("Admin",
         new AuthorizationPolicyBuilder().AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
             .RequireAuthenticatedUser().Build())
-    .AddPolicy("StoreAdmin",
+    .AddPolicy("StoreOwner",
         new AuthorizationPolicyBuilder().AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
             .RequireAuthenticatedUser().Build());
 
@@ -49,14 +48,13 @@ builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
+builder.Services.AddDbContext<FridgeDbContext>();
+
 builder.Services.AddScoped<JwtIssuerService>();
-builder.Services.AddScoped<FridgeDbContext>();
-builder.Services.AddScoped<Role>();
-builder.Services.AddScoped<User>();
+builder.Services.AddScoped<CryptService>();
+
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();
-
-
 
 var app = builder.Build();
 
