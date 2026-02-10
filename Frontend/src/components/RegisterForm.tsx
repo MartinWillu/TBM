@@ -31,7 +31,7 @@ export function RegisterForm({ onError, onSucess }: RegisterFormProps) {
         <form onSubmit={handleSubmit}>
             <input type="text" placeholder="Username" onChange={(event) => setUsername(event.target.value.trim())} />
             <input type="password" placeholder="Password" onChange={(event) => setPassword(event.target.value.trim())} />
-            <button type="submit">Submit</button>
+            <button type="submit">Sign Up!</button>
         </form>
     )
 }
