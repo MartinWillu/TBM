@@ -1,3 +1,5 @@
+
+import "./Styles/PasswordBoxStyle.css";
 function PasswordBox() {
   return (
     <div className="password-box">
