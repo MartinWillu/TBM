@@ -1,4 +1,5 @@
 import {useEffect, useState } from "react";
+import "../styles/HomePage.css";
 
 // define store - should be moved to separate file later
 type Store = {
@@ -20,6 +21,8 @@ function fetchStoresMock(): Promise<Store[]> {
   ];
   return new Promise((resolve) => setTimeout(() => resolve(mock), 500));
 }
+
+
 
 
 export function HomePage() {
@@ -52,27 +55,17 @@ export function HomePage() {
         {loading && <p>Loading stores…</p>}
 
         {!loading && !err && (
-          <section
-            style={{
-              display: "flex",
-              gap: 16,
-              flexDirection: "column",
-              alignItems: "stretch",
-              justifyContent: "flex-start"
-            }}
-          >
+          <section className="flex-container">
+            {/* sees if theres any stores*/}
             {stores.length === 0 && <p>No stores yet.</p>}
 
+            {/* for each store in stores it creates a card*/}
+            <div >
             {stores.map((s) => (
-              <div
+              <div className="flex-item"
+                //className="butikk"
                 key={s.id}
-                style={{
-                  border: "1px solid #d36464",
-                  borderRadius: 12,
-                  padding: 16,
-                  boxShadow: "0 4px 12px rgba(0,0,0,0.06)",
-                  background: "#595959",
-                }}
+
               >
                 {s.logoUrl && (
                   <img
@@ -87,6 +80,7 @@ export function HomePage() {
                 {Array.isArray(s.groceries) && <p style={{ marginTop: 8 }}>{s.groceries.length} items</p>}
               </div>
             ))}
+            </div>
           </section>
         )}
 
@@ -94,3 +88,4 @@ export function HomePage() {
         </>
     )
 }
+

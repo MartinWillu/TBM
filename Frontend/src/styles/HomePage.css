@@ -1,0 +1,28 @@
+.butikk{
+    background: rgb(148, 148, 161);   
+    border: rgb(130, 11, 248);      
+    padding: 3000;
+    box-shadow: "0 4px 12px rgba(0,0,0,0.06)";
+                  
+                
+}; 
+
+.flex-container{
+    display: flex;
+    flex-direction: row;
+    
+    justify-content: space-evenly;
+}
+
+.flex-item {
+    background-color: blue;
+}
+
+.columnview{
+    display: "flex";
+    gap: 36;
+    border: red;
+    flex-direction: "column";
+    align-items: "stretch";
+    justify-content: "flex-start";
+};
