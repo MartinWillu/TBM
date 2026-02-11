@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import "../styles/HomePage.css";
 import { useNavigate } from "react-router"
+import LogoutBox from "../components/LogoutBox";
 
 // define store - should be moved to separate file later
 type Store = {
@@ -105,17 +106,14 @@ export function HomePage() {
     load();
   }, []);
 
-  const handleLogout = () => {
-    localStorage.removeItem("authToken");
-    navigator("/login");
-    console.log("Logged out");
-  };
+
 
   return (
     <>
       <header>
+        
         <h1>The Forbidden Fridge</h1>
-        <button className="LogOut" onClick={handleLogout}> Log Out</button>
+        <LogoutBox />
       </header>
 
       <main>
