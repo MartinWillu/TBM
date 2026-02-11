@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import "../styles/HomePage.css";
+import { useNavigate } from "react-router"
 
 // define store - should be moved to separate file later
 type Store = {
@@ -85,6 +86,7 @@ function fetchStoresMock(): Promise<Store[]> {
 }
 
 export function HomePage() {
+  const navigator = useNavigate();
   const [stores, setStores] = useState<Store[]>([]);
   const [loading, setLoading] = useState(true);
   const [err, setErr] = useState<string | null>(null);
@@ -103,10 +105,17 @@ export function HomePage() {
     load();
   }, []);
 
+  const handleLogout = () => {
+    localStorage.removeItem("authToken");
+    navigator("/login");
+    console.log("Logged out");
+  };
+
   return (
     <>
       <header>
         <h1>The Forbidden Fridge</h1>
+        <button className="LogOut" onClick={handleLogout}> Log Out</button>
       </header>
 
       <main>
