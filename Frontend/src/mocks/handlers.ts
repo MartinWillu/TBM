@@ -9,11 +9,15 @@ const mockStores: Store[] = storesData as Store[];
 const mockGroceries: Grocery[] = groceriesData as Grocery[];
 
 export const handlers = [
-    http.post('backend/api/Auth/register', async () => {
+    http.get('backend/api/auth/verify', async () => {
+        return new HttpResponse("Authorized", { status: 200 })
+    }),
+
+    http.post('backend/api/auth/register', async () => {
         return new HttpResponse("created user with username: testuser", { status: 201 });
     }),
 
-    http.post('backend/api/Auth/login', async () => {
+    http.post('backend/api/auth/login', async () => {
         return new HttpResponse("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.fake-token", { status: 200 });
     }),
 
@@ -47,6 +51,10 @@ export const handlers = [
     }),
 
     http.get('backend/api/Store', () => {
+        mockStores.map((store, index) => {
+            store.groceriyId = index;
+            store.groceries = groceriesData;
+        })
         return HttpResponse.json(mockStores);
     }),
 
