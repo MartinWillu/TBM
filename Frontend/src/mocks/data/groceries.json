@@ -2,6 +2,7 @@
     {
         "id": 1,
         "name": "Apple",
+        "logoUrl": "https://png.pngtree.com/png-vector/20231017/ourmid/pngtree-fresh-apple-fruit-red-png-image_10203073.png",
         "currentPrice": 1.5,
         "oldPrice": 2.0,
         "quantity": 100,
@@ -16,6 +17,7 @@
     {
         "id": 2,
         "name": "Banana",
+        "logoUrl": "https://png.pngtree.com/png-clipart/20220716/ourmid/pngtree-banana-yellow-fruit-banana-skewers-png-image_5944324.png",
         "currentPrice": 0.8,
         "oldPrice": 1.0,
         "quantity": 150,
@@ -30,6 +32,7 @@
     {
         "id": 3,
         "name": "Carrot",
+        "logoUrl": "https://purepng.com/public/uploads/large/purepng.com-carrotscarrotvegetablesfreshdeliciousefoodhealthycarrots-481521740717jmglq.png",
         "currentPrice": 0.5,
         "oldPrice": 0.7,
         "quantity": 200,
@@ -44,6 +47,7 @@
     {
         "id": 4,
         "name": "Milk",
+        "logoUrl": "https://static.vecteezy.com/system/resources/thumbnails/013/453/749/small/milk-box-3d-rendering-isometric-icon-png.png",
         "currentPrice": 3.0,
         "oldPrice": 3.5,
         "quantity": 50,

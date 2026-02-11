@@ -19,6 +19,7 @@ export interface Store {
 }
 
 export interface Grocery {
+    logoUrl: string | undefined;
     id: number;
     name: string;
     currentPrice: number;

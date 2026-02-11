@@ -1,21 +1,23 @@
 import { useEffect, useState } from "react";
 import "../styles/HomePage.css";
-import type { Store } from "../types";
-import { fetchStores } from "../api/fetchApi";
-import { useNavigate } from "react-router";
-import LogoutBox from "../components/LogoutBox";
+import type { Grocery, Store } from "../types";
+import { fetchGroceries, fetchStores } from "../api/fetchApi";
+
 
 export function HomePage() {
-  const navigator = useNavigate();
   const [stores, setStores] = useState<Store[]>([]);
+  const [groceries, setGroceries] = useState<Grocery[]>([]);
   const [loading, setLoading] = useState(true);
   const [err, setErr] = useState<string | null>(null);
 
   useEffect(() => {
     async function load() {
       try {
-        const data = await fetchStores();
-        setStores(data);
+        const storesData = await fetchStores();
+        setStores(storesData);
+
+        const groceriesData = await fetchGroceries();
+        setGroceries(groceriesData);
       } catch {
         setErr("Failed to load stores");
       } finally {
@@ -31,8 +33,7 @@ export function HomePage() {
     <>
       <header>
         
-        <h1>The Forbidden Fridge</h1>
-        {/*<LogoutBox />*/}
+      <h1>The Forbidden Fridge</h1>
       </header>
 
       <main>
@@ -66,36 +67,31 @@ export function HomePage() {
                   {Array.isArray(s.groceries) && (
                     <p>{s.groceries.length} items</p>
                   )}
-                  <button className="myButton" onClick={() => console.log("Clicked!")}>
-                    See more
-                  </button>
                 </div>
               ))}
             </div>
             <div className="column">
               {/* If there are no stores */}
               <h2>Groceries</h2>
-              {stores.length === 0 && <p>No stores yet.</p>}
+              {groceries.length === 0 && <p>No groceries yet.</p>}
 
               {/* Store cards */}
-              {stores.map((s) => (
-                <div className="flex-item" key={s.id}>
-                  {s.logoUrl && (
+              {groceries.map((g) => (
+                <div className="flex-item" key={g.id}>
+                  {g.logoUrl && (
                     <img
                       className="flex-item__image"
-                      src={s.logoUrl}
-                      alt={`${s.name} logo`}   // small accessibility improvement
+                      src={g.logoUrl}
+                      alt={`${g.name} logo`}   // small accessibility improvement
                       onError={(e) =>
                       ((e.currentTarget as HTMLImageElement).style.display =
                         "none")
                       }
                     />
                   )}
-                  <h3>{s.name}</h3>
-                  <p>Butikk: {s.name}</p>
-                  {Array.isArray(s.groceries) && (
-                    <p>{s.groceries.length} items</p>
-                  )}
+                  <h3>{g.name}</h3>
+                  <p>Current price: {g.currentPrice}$ <br/> Quantity: {g.quantity}</p>
+                  
                 </div>
               ))}
             </div>
