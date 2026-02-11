@@ -11,10 +11,10 @@ import Navbar from './components/Navbar';
 const App: React.FC = () => {
   const navLinks = [
     { text: 'Home', url: '/' },
-    { text: 'Login', url: '/login' },
-    { text: 'Register', url: '/register' },
+    { text: 'Store', url: '/store' },
+    { text: 'Grocery', url: '/grocery' },
   ];
- 
+
   return (
     <div>
         <Routes>
