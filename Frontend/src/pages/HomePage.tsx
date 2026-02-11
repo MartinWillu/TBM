@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import "../styles/HomePage.css";
 import type { Store } from "../types";
 import { fetchStores } from "../api/fetchApi";
+import { useNavigate } from "react-router";
+import LogoutBox from "../components/LogoutBox";
 
 export function HomePage() {
   const navigator = useNavigate();
@@ -30,7 +32,7 @@ export function HomePage() {
       <header>
         
         <h1>The Forbidden Fridge</h1>
-        <LogoutBox />
+        {/*<LogoutBox />*/}
       </header>
 
       <main>
