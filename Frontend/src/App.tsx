@@ -18,8 +18,9 @@ const App: React.FC = () => {
   return (
     <div>
         <Routes>
+          <Route element={ <Navbar links={navLinks} />} />
            <Route element={<ProtectedRoute />}>
-             <Navbar links={navLinks} />
+            
               <Route path='/' element={<HomePage />} />
               <Route path='/store' element={<StorePage />} />
               <Route path='/grocery' element={<GroceryPage />} />
