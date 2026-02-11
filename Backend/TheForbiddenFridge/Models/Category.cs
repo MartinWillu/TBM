@@ -1,10 +1,15 @@
-﻿namespace TheForbiddenFridge.Models;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace TheForbiddenFridge.Models;
 
 public class Category
 {
     public int Id { get; set; }
+
+    [Required]
+    [MaxLength(100)]
     public string Name { get; set; }
-    
+
     public List<Grocery> Groceries { get; set; }
     public int GroceryId { get; set; }
 
