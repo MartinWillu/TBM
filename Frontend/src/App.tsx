@@ -5,18 +5,27 @@ import { RegisterPage } from './pages/RegisterPage'
 import { HomePage } from './pages/HomePage'
 import { StorePage } from './pages/StorePage'
 import { GroceryPage } from './pages/GroceryPage'
+import Navbar from './components/Navbar';
 
-function App() {
-
+const App: React.FC = () => {
+  const navLinks = [
+    { text: 'Home', url: '/' },
+    { text: 'Login', url: '/login' },
+    { text: 'Register', url: '/register' },
+  ];
+ 
   return (
-    <Routes>
-      <Route path='/' element={<HomePage />} />
-      <Route path='/login' element={<LoginPage />} />
-      <Route path='/register' element={<RegisterPage />} />
-      <Route path='/store/:id' element={<StorePage />} />
-      <Route path='/grocery/:id' element={<GroceryPage />} />
-    </Routes>
-  )
-}
+    <div>
+      <Navbar links={navLinks} />
+        <Routes>
+          <Route path='/' element={<HomePage />} />
+          <Route path='/login' element={<LoginPage />} />
+          <Route path='/register' element={<RegisterPage />} />
+          <Route path='/store/:id' element={<StorePage />} />
+          <Route path='/grocery/:id' element={<GroceryPage />} />
+        </Routes>
+    </div>
+  );
+};
 
 export default App

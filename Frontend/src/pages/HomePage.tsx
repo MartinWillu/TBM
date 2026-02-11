@@ -92,7 +92,7 @@ export function HomePage() {
   useEffect(() => {
     async function load() {
       try {
-        const data = await fetchStoresMock(); // ⬅️ mocked for now
+        const data = await fetchStoresMock(); // mocked for now
         setStores(data);
       } catch (e: any) {
         setErr(e.message ?? "Failed to load stores");
