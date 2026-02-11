@@ -11,8 +11,8 @@ using TheForbiddenFridge.DbContexts;
 namespace TheForbiddenFridge.Migrations
 {
     [DbContext(typeof(FridgeDbContext))]
-    [Migration("20260128131127_userStoreOwner")]
-    partial class userStoreOwner
+    [Migration("20260211141835_groceryImages")]
+    partial class groceryImages
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -67,7 +67,8 @@ namespace TheForbiddenFridge.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.HasKey("Id");
 
@@ -88,9 +89,15 @@ namespace TheForbiddenFridge.Migrations
                     b.Property<float>("CurrentPrice")
                         .HasColumnType("real");
 
+                    b.Property<string>("ImageUrl")
+                        .IsRequired()
+                        .HasMaxLength(300)
+                        .HasColumnType("character varying(300)");
+
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(150)
+                        .HasColumnType("character varying(150)");
 
                     b.Property<float>("OldPrice")
                         .HasColumnType("real");
@@ -116,7 +123,8 @@ namespace TheForbiddenFridge.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
 
                     b.HasKey("Id");
 
@@ -136,11 +144,13 @@ namespace TheForbiddenFridge.Migrations
 
                     b.Property<string>("LogoUrl")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(300)
+                        .HasColumnType("character varying(300)");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(120)
+                        .HasColumnType("character varying(120)");
 
                     b.Property<int>("UserId")
                         .HasColumnType("integer");
@@ -162,14 +172,16 @@ namespace TheForbiddenFridge.Migrations
 
                     b.Property<string>("Password")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
 
                     b.Property<int>("RoleId")
                         .HasColumnType("integer");
 
                     b.Property<string>("Username")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
 
                     b.HasKey("Id");
 
