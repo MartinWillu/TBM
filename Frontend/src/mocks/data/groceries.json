@@ -1,0 +1,58 @@
+[
+    {
+        "id": 1,
+        "name": "Apple",
+        "currentPrice": 1.5,
+        "oldPrice": 2.0,
+        "quantity": 100,
+        "storeId": 1,
+        "categories": [
+            {
+                "id": 1,
+                "name": "Fruits"
+            }
+        ]
+    },
+    {
+        "id": 2,
+        "name": "Banana",
+        "currentPrice": 0.8,
+        "oldPrice": 1.0,
+        "quantity": 150,
+        "storeId": 1,
+        "categories": [
+            {
+                "id": 1,
+                "name": "Fruits"
+            }
+        ]
+    },
+    {
+        "id": 3,
+        "name": "Carrot",
+        "currentPrice": 0.5,
+        "oldPrice": 0.7,
+        "quantity": 200,
+        "storeId": 2,
+        "categories": [
+            {
+                "id": 2,
+                "name": "Vegetables"
+            }
+        ]
+    },
+    {
+        "id": 4,
+        "name": "Milk",
+        "currentPrice": 3.0,
+        "oldPrice": 3.5,
+        "quantity": 50,
+        "storeId": 3,
+        "categories": [
+            {
+                "id": 3,
+                "name": "Dairy"
+            }
+        ]
+    }
+]

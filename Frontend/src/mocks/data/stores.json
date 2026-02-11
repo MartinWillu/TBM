@@ -1,0 +1,20 @@
+[
+    {
+        "id": 1,
+        "name": "Coop Extra",
+        "logoUrl": "https://hemsedal.com/imager/images/Bedrifter/Coop-Extra/3699/coop_extra_logo_pms_6516ea503e79af30f51bd79958eef449.jpg",
+        "userId": 1
+    },
+    {
+        "id": 2,
+        "name": "Rema 1000",
+        "logoUrl": "https://apiportaltest.rema.no/content/REMA%201000%20Logo%20Horisontal%20Farge%20RGB.png",
+        "userId": 2
+    },
+    {
+        "id": 3,
+        "name": "Kiwi",
+        "logoUrl": "https://i0.wp.com/winteropen.no/wp-content/uploads/2019/07/kiwi-logo-png-4.png?ssl=1",
+        "userId": 1
+    }
+]
