@@ -4,6 +4,7 @@ import type { Store } from "../types";
 import { fetchStores } from "../api/fetchApi";
 
 export function HomePage() {
+  const navigator = useNavigate();
   const [stores, setStores] = useState<Store[]>([]);
   const [loading, setLoading] = useState(true);
   const [err, setErr] = useState<string | null>(null);
@@ -22,10 +23,14 @@ export function HomePage() {
     load();
   }, []);
 
+
+
   return (
     <>
       <header>
+        
         <h1>The Forbidden Fridge</h1>
+        <LogoutBox />
       </header>
 
       <main>
