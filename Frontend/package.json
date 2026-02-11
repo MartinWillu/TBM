@@ -4,7 +4,8 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "cross-env VITE_MOCKING_ENABLED=true vite",
+    "dev": "vite",
+    "dev:mock": "cross-env VITE_MOCKING_ENABLED=true vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview"
