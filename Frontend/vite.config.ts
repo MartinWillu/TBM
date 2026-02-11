@@ -12,5 +12,8 @@ export default defineConfig({
         rewrite: (path) => path.replace(/^\/backend/, '')
       }
     }
+  },
+  optimizeDeps: {
+    exclude: ["msw", "@mswjs/interceptors"]
   }
 })
