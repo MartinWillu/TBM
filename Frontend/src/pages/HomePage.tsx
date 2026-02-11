@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import "../styles/HomePage.css";
 import type { Grocery, Store } from "../types";
 import { fetchGroceries, fetchStores } from "../api/fetchApi";
+import { formatCurrency, isOnSale } from "../utils/pricing";
 
 
 export function HomePage() {
@@ -9,6 +10,8 @@ export function HomePage() {
   const [groceries, setGroceries] = useState<Grocery[]>([]);
   const [loading, setLoading] = useState(true);
   const [err, setErr] = useState<string | null>(null);
+
+  
 
   useEffect(() => {
     async function load() {
@@ -76,24 +79,44 @@ export function HomePage() {
               {groceries.length === 0 && <p>No groceries yet.</p>}
 
               {/* Store cards */}
-              {groceries.map((g) => (
-                <div className="flex-item" key={g.id}>
-                  {g.logoUrl && (
-                    <img
-                      className="flex-item__image"
-                      src={g.logoUrl}
-                      alt={`${g.name} logo`}   // small accessibility improvement
-                      onError={(e) =>
-                      ((e.currentTarget as HTMLImageElement).style.display =
-                        "none")
-                      }
-                    />
-                  )}
-                  <h3>{g.name}</h3>
-                  <p>Current price: {g.currentPrice}$ <br/> Quantity: {g.quantity}</p>
-                  
-                </div>
-              ))}
+              {groceries.map((g) => {
+                const sale = isOnSale(g);
+                
+                return (
+                  <div className={`flex-item ${sale ? "is-sale" : ""}`} key={g.id}>
+                    {g.logoUrl && (
+                      <img
+                        className="flex-item__image"
+                        src={g.logoUrl}
+                        alt={`${g.name} logo`}   // small accessibility improvement
+                        onError={(e) =>
+                        ((e.currentTarget as HTMLImageElement).style.display =
+                          "none")
+                        }
+                      />
+                    )}
+                    <h3>{g.name}</h3>
+                    
+                    {sale ? (
+                      <p aria-label={`On sale. Now ${g.currentPrice}, was ${g.oldPrice}`}>
+                        <span className="price price--current">
+                          {formatCurrency(g.currentPrice, "NOK", "nb-NO")}
+                        </span>{" "}
+                        <span className="price price--old" aria-hidden="true">
+                          {formatCurrency(g.oldPrice!, "NOK", "nb-NO")}
+                        </span>
+                        <br />
+                        Quantity: {g.quantity}
+                      </p>
+                    ):(
+                      <p>
+                        Current price: {formatCurrency(g.currentPrice, "NOK", "nb-NO")}
+                        <br /> 
+                        Quantity: {g.quantity}
+                      </p>
+                    )}
+                  </div>
+              )})}
             </div>
           </section>
         )}

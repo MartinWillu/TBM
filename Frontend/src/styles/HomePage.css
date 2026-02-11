@@ -78,3 +78,14 @@ header h1 {
 .myButton:hover {
   background: #a14d4d;
 }
+
+.is-sale .price--current {
+  color: #0a7d00; /* green for sales */
+  font-weight: 700;
+}
+
+.is-sale .price--old {
+  color: #888;
+  text-decoration: line-through;
+  margin-left: 0.5rem;
+}
