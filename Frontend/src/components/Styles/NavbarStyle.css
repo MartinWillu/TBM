@@ -1,25 +1,51 @@
 nav {
   background-color: #333;
   color: white;
+  width: 100%;
+  margin: 0;
+  padding: 0;
 }
- 
-ul {
+
+nav ul {
   list-style-type: none;
   margin: 0;
   padding: 0;
   display: flex;
   justify-content: space-around;
+  flex-wrap: wrap;
 }
- 
-li {
-  padding: 15px;
+
+nav li {
+  padding: 0;
+  margin: 0;
 }
- 
-a {
+
+nav button {
+  background-color: transparent;
   color: white;
-  text-decoration: none;
+  border: none;
+  padding: 15px 20px;
+  font-size: 1em;
+  cursor: pointer;
+  transition: background-color 0.25s;
+  border-radius: 0;
 }
- 
-a:hover {
-  text-decoration: underline;
+
+nav button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-color: transparent;
+}
+
+nav button:focus,
+nav button:focus-visible {
+  outline: 2px solid white;
+  outline-offset: -2px;
+}
+
+nav .logout-button {
+  color: #ff6b6b;
+}
+
+nav .logout-button:hover {
+  background-color: rgba(255, 107, 107, 0.1);
 }

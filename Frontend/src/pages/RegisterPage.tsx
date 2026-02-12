@@ -1,8 +1,9 @@
 import { useState } from "react";
-import { RegisterForm } from "../components/RegisterForm";
+import { AuthForm } from "../components/AuthForm";
 import type { UserInfo } from "../types";
 import { registerUser } from "../api/auth";
 import { useNavigate } from "react-router";
+import "../components/Styles/LoginBoxStyle.css"
 
 export function RegisterPage() {
     const [error, setError] = useState("");
@@ -15,16 +16,18 @@ export function RegisterPage() {
     const handleSubmit = (userInfo: UserInfo) => {
         registerUser(userInfo).then(() => {
             navigator("/login");
-        }).catch(() => {
-            setError("Register request failed!")
+        }).catch((e: Error) => {
+            setError(e.message);
         })
     }
 
     return (
         <>
-            <h1>Register</h1>
-            <RegisterForm onError={handleOnError} onSucess={handleSubmit} ></RegisterForm>
-            <p>{error}</p>
+            <h1>The Forbidden Fridge</h1>
+            <h2>Register</h2>
+            <AuthForm onError={handleOnError} onSuccess={handleSubmit} submitLabel="Create!" isRegister={true} />
+            <a style={{ cursor: "pointer" }} onClick={() => navigator("/login")}><p>Already have an account?</p></a>
+            {error ? <p className="error">{error}</p> : <></>}
         </>
     )
 }

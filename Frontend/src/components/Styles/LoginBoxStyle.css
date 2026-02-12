@@ -1,8 +1,18 @@
-
-.login-button{
-    background-color: blue;
+.login-button {
+    background-color: #646cff;
     color: white;
-    border: 1px solid black;
+    border: 1px solid #535bf2;
     margin: 10px;
-    width: 100px; 
+    width: 100px;
+    transition: background-color 0.25s, border-color 0.25s;
+}
+
+.login-button:hover {
+    background-color: #535bf2;
+    border-color: #646cff;
+}
+
+.login-button:focus,
+.login-button:focus-visible {
+    outline: 4px auto -webkit-focus-ring-color;
 }
