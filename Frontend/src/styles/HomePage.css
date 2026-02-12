@@ -67,19 +67,6 @@ header h1 {
 }
 
 
-.myButton {
-  background: #d36464;
-  color: white;
-  padding: 12px 20px;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-}
-
-.myButton:hover {
-  background: #a14d4d;
-}
-
 .is-sale .price--current {
   color: #0a7d00; /* green for sales */
   font-weight: 700;

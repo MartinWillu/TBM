@@ -40,25 +40,29 @@ export function GroceryPage() {
       </header>
 
       <main>
+        {loading && <p>Loading stores…</p>}
+        {!loading && err && <p style={{ color: "tomato" }}>{err}</p>}
+
+        {!loading && !err && (
         <section>
             <div className="column">
-              {/* If there are no stores */}
+             
               <h2>Groceries</h2>
               {groceries.length === 0 && <p>No groceries yet.</p>}
 
-              {/* Store cards */}
+             
               {groceries.map((g) => {
                 const sale = isOnSale(g);
                 
                 return (
                   <div className={`flex-item ${sale ? "is-sale" : ""}`} key={g.id}
-                  onClick={() => navigate(`/`)}
+                  onClick={() => navigate(`/`)} // clackable with redirectory
                   style={{ cursor: "pointer" }}>
                     {g.logoUrl && (
                       <img
                         className="flex-item__image"
                         src={g.logoUrl}
-                        alt={`${g.name} logo`}   // small accessibility improvement
+                        alt={`${g.name} logo`}   
                         onError={(e) =>
                         ((e.currentTarget as HTMLImageElement).style.display =
                           "none")
@@ -89,6 +93,7 @@ export function GroceryPage() {
               )})}
             </div>
           </section>
+        )}
       </main>
     </>
   );
