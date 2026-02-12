@@ -1,83 +1,64 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TheForbiddenFridge.DTOs;
-using TheForbiddenFridge.Models;
-using TheForbiddenFridge.Repositories;
+using TheForbiddenFridge.Services;
 
 namespace TheForbiddenFridge.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class GroceryController(
-    IStoreRepository storeRepository,
-    IGroceryRepository groceryRepository,
-    ICategoryRepository categoryRepository) : ControllerBase
+public class GroceryController(IGroceryService groceryService) : ControllerBase
 {
+    private readonly IGroceryService _groceryService = groceryService;
+
     [HttpGet]
     public IActionResult GetAllGroceries()
     {
-        return Ok(groceryRepository.GetAll());
+        var groceries = _groceryService.GetAllGroceries();
+        return Ok(groceries);
     }
 
     [HttpGet("store/{storeId}")]
     public IActionResult GetAllGroceriesByStoreId(int storeId)
     {
-        var store = storeRepository.GetById(storeId);
-        if (store == null)
+        if (!_groceryService.StoreExists(storeId))
         {
             return NotFound("Store not found");
         }
 
-        var groceries = groceryRepository.GetAll().Where(g => g.StoreId == storeId);
+        var groceries = _groceryService.GetGroceriesByStoreId(storeId);
         return Ok(groceries);
     }
 
     [HttpGet("category/{categoryName}")]
     public IActionResult GetAllGroceryByCategory(string categoryName)
     {
-        var groceries = groceryRepository.GetAll().Where(g => g.Categories.Any(c => c.Name == categoryName));
-        if (groceries != null)
-        {
-            return Ok(groceries);
-        }
-
-        return NotFound("No groceries found for the specified category");
+        var groceries = _groceryService.GetGroceriesByCategory(categoryName);
+        return Ok(groceries);
     }
 
     [HttpGet("store/{storeId}/category/{categoryName}")]
     public IActionResult GetAllGrocieresByStoreIdAndCategoryName(int storeId, string categoryName)
     {
-        var store = storeRepository.GetById(storeId);
-        if (store == null)
+        if (!_groceryService.StoreExists(storeId))
         {
             return NotFound("Store not found");
         }
 
-        var groceries = groceryRepository.GetAll()
-            .Where(g => g.StoreId == storeId && g.Categories.Any(c => c.Name == categoryName));
-
-        if (groceries != null)
-        {
-            return Ok(groceries);
-        }
-
-        return NotFound("No groceries found for the specified category in this store");
+        var groceries = _groceryService.GetGroceriesByStoreIdAndCategory(storeId, categoryName);
+        return Ok(groceries);
     }
 
     [HttpGet("name/{name}")]
     public IActionResult GetGroceryByName(string name)
     {
-        var grocery = groceryRepository.GetAll().Where(g => g.Name == name);
-        if (grocery != null)
-        {
-            return Ok(grocery);
-        }
-        return NotFound($"Grocery not found for this name: {name}");
+        var groceries = _groceryService.GetGroceriesByName(name);
+        return Ok(groceries);
     }
 
     [HttpGet("{id}")]
     public IActionResult GetGroceryById(int id)
     {
-        var grocery = groceryRepository.GetById(id);
+        var grocery = _groceryService.GetGroceryById(id);
         if (grocery == null)
         {
             return NotFound($"Grocery with ID {id} not found");
@@ -93,31 +74,17 @@ public class GroceryController(
             return BadRequest(ModelState);
         }
 
-        var store = storeRepository.GetById(groceryDto.StoreId);
-        if (store == null)
+        if (!_groceryService.StoreExists(groceryDto.StoreId))
         {
             return BadRequest($"Store with ID {groceryDto.StoreId} not found");
         }
 
-        var category = categoryRepository.GetById(groceryDto.CategoryId);
-        if (category == null)
+        if (!_groceryService.CategoryExists(groceryDto.CategoryId))
         {
             return BadRequest($"Category with ID {groceryDto.CategoryId} not found");
         }
 
-        var grocery = new Grocery
-        {
-            Name = groceryDto.Name,
-            CurrentPrice = groceryDto.CurrentPrice,
-            OldPrice = groceryDto.OldPrice,
-            Quantity = groceryDto.Quantity,
-            ImageUrl = groceryDto.ImageUrl ?? string.Empty,
-            StoreId = groceryDto.StoreId,
-            CategoryId = groceryDto.CategoryId
-        };
-
-        groceryRepository.Create(grocery);
-
+        var grocery = _groceryService.CreateGrocery(groceryDto);
         return CreatedAtAction(nameof(GetGroceryById), new { id = grocery.Id }, grocery);
     }
 
@@ -129,48 +96,38 @@ public class GroceryController(
             return BadRequest(ModelState);
         }
 
-        var existingGrocery = groceryRepository.GetById(id);
-        if (existingGrocery == null)
-        {
-            return NotFound($"Grocery with ID {id} not found");
-        }
-
-        var store = storeRepository.GetById(groceryDto.StoreId);
-        if (store == null)
+        if (!_groceryService.StoreExists(groceryDto.StoreId))
         {
             return BadRequest($"Store with ID {groceryDto.StoreId} not found");
         }
 
-        var category = categoryRepository.GetById(groceryDto.CategoryId);
-        if (category == null)
+        if (!_groceryService.CategoryExists(groceryDto.CategoryId))
         {
             return BadRequest($"Category with ID {groceryDto.CategoryId} not found");
         }
 
-        existingGrocery.Name = groceryDto.Name;
-        existingGrocery.CurrentPrice = groceryDto.CurrentPrice;
-        existingGrocery.OldPrice = groceryDto.OldPrice;
-        existingGrocery.Quantity = groceryDto.Quantity;
-        existingGrocery.ImageUrl = groceryDto.ImageUrl ?? string.Empty;
-        existingGrocery.StoreId = groceryDto.StoreId;
-        existingGrocery.CategoryId = groceryDto.CategoryId;
-
-        groceryRepository.Update(existingGrocery);
-
-        return Ok(existingGrocery);
+        try
+        {
+            var grocery = _groceryService.UpdateGrocery(id, groceryDto);
+            return Ok(grocery);
+        }
+        catch (KeyNotFoundException ex)
+        {
+            return NotFound(ex.Message);
+        }
     }
 
     [HttpDelete("{id}")]
     public IActionResult DeleteGrocery(int id)
     {
-        var grocery = groceryRepository.GetById(id);
-        if (grocery == null)
+        try
         {
-            return NotFound($"Grocery with ID {id} not found");
+            _groceryService.DeleteGrocery(id);
+            return NoContent();
         }
-
-        groceryRepository.Delete(grocery);
-
-        return NoContent();
+        catch (KeyNotFoundException ex)
+        {
+            return NotFound(ex.Message);
+        }
     }
 }
