@@ -1,13 +1,12 @@
 
 
+
 type Store = {
   id: number;
   name: string;
   logoUrl: string;
   userId: number;
 };
-
-
 // StoreCard.tsx
 type Props = {
   store: Store;
