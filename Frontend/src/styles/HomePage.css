@@ -31,6 +31,7 @@ main {
   border: 1px solid #d36464;
   border-radius: 12px;
   padding: 16px;
+  margin-bottom: 20px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
   background: #595959;
   color: #ffffff;             /* ensures text is readable on dark background */
