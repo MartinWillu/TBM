@@ -5,7 +5,7 @@ namespace TheForbiddenFridge.DTOs;
 public class GroceryDTO
 {
     [Required]
-    [MaxLength(150)]
+    [MaxLength(100)]
     public string Name { get; set; }
 
     [Required]
