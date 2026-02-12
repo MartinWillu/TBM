@@ -4,24 +4,7 @@ import { StoreCard } from "../components/StoreCard";
 import { SearchBar } from "../components/SearchBar";
 import { fetchStores, fetchGroceries } from "../api/fetchApi";
 import { GroceryCard } from "../components/GroceryCard";
-
-type Store = {
-  id: number;
-  name: string;
-  logoUrl: string;
-  userId: number;
-};
-
-type Grocery = {
-    logoUrl: string | undefined;
-    id: number;
-    name: string;
-    currentPrice: number;
-    oldPrice: number;
-    quantity: number;
-    storeId: number;
-    categoryId?: number; 
-}
+import type { Store, Grocery } from "../types";
 
 export function StorePage() {
   const [query, setQuery] = useState("");
@@ -49,9 +32,7 @@ export function StorePage() {
     setSelectedStore(store);
   }
 
-  // -----------------------------
-  // 🟢 SHOW GROCERIES FOR STORE
-  // -----------------------------
+
   if (selectedStore) {
     const groceriesForStore = groceriesData.filter(
       (g) => g.storeId === selectedStore.id
@@ -64,8 +45,8 @@ export function StorePage() {
 
         {groceriesForStore.length === 0 && <p>No groceries found.</p>}
 
-        
-          {groceriesForStore.map((g) => (
+
+        {groceriesForStore.map((g) => (
           <GroceryCard key={g.id} grocery={g} />
 
         ))}
@@ -73,9 +54,6 @@ export function StorePage() {
     );
   }
 
-  // -----------------------------
-  // 🟦 SHOW STORE LIST
-  // -----------------------------
   return (
     <div>
       <h1>Stores</h1>
@@ -95,7 +73,7 @@ export function StorePage() {
           <StoreCard
             key={store.id}
             store={store}
-            onClick={handleStoreClick}  // 👈 CLICK HANDLER ADDED
+            onClick={handleStoreClick}
           />
         ))}
       </div>
