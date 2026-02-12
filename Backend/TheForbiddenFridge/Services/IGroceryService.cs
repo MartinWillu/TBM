@@ -16,4 +16,5 @@ public interface IGroceryService
     void DeleteGrocery(int id);
     bool StoreExists(int storeId);
     bool CategoryExists(int categoryId);
+    bool UserOwnsStore(int storeId, int userId);
 }

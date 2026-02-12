@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using TheForbiddenFridge.DTOs;
 using TheForbiddenFridge.Services;
 
@@ -66,6 +69,7 @@ public class GroceryController(IGroceryService groceryService) : ControllerBase
         return Ok(grocery);
     }
 
+    [Authorize(Roles = "Admin, StoreOwner")]
     [HttpPost]
     public IActionResult CreateGrocery([FromBody] GroceryDTO groceryDto)
     {
@@ -84,16 +88,29 @@ public class GroceryController(IGroceryService groceryService) : ControllerBase
             return BadRequest($"Category with ID {groceryDto.CategoryId} not found");
         }
 
+        var authResult = ValidateStoreOwnership(groceryDto.StoreId);
+        if (authResult != null)
+        {
+            return authResult;
+        }
+
         var grocery = _groceryService.CreateGrocery(groceryDto);
         return CreatedAtAction(nameof(GetGroceryById), new { id = grocery.Id }, grocery);
     }
 
+    [Authorize(Roles = "Admin, StoreOwner")]
     [HttpPut("{id}")]
     public IActionResult UpdateGrocery(int id, [FromBody] GroceryDTO groceryDto)
     {
         if (!ModelState.IsValid)
         {
             return BadRequest(ModelState);
+        }
+
+        var existingGrocery = _groceryService.GetGroceryById(id);
+        if (existingGrocery == null)
+        {
+            return NotFound($"Grocery with ID {id} not found");
         }
 
         if (!_groceryService.StoreExists(groceryDto.StoreId))
@@ -104,6 +121,21 @@ public class GroceryController(IGroceryService groceryService) : ControllerBase
         if (!_groceryService.CategoryExists(groceryDto.CategoryId))
         {
             return BadRequest($"Category with ID {groceryDto.CategoryId} not found");
+        }
+
+        var authResult = ValidateStoreOwnership(existingGrocery.StoreId);
+        if (authResult != null)
+        {
+            return authResult;
+        }
+
+        if (existingGrocery.StoreId != groceryDto.StoreId)
+        {
+            authResult = ValidateStoreOwnership(groceryDto.StoreId, "You do not have permission to move groceries to this store");
+            if (authResult != null)
+            {
+                return authResult;
+            }
         }
 
         try
@@ -117,9 +149,22 @@ public class GroceryController(IGroceryService groceryService) : ControllerBase
         }
     }
 
+    [Authorize(Roles = "Admin, StoreOwner")]
     [HttpDelete("{id}")]
     public IActionResult DeleteGrocery(int id)
     {
+        var grocery = _groceryService.GetGroceryById(id);
+        if (grocery == null)
+        {
+            return NotFound($"Grocery with ID {id} not found");
+        }
+
+        var authResult = ValidateStoreOwnership(grocery.StoreId);
+        if (authResult != null)
+        {
+            return authResult;
+        }
+
         try
         {
             _groceryService.DeleteGrocery(id);
@@ -129,5 +174,18 @@ public class GroceryController(IGroceryService groceryService) : ControllerBase
         {
             return NotFound(ex.Message);
         }
+    }
+
+    private ForbidResult? ValidateStoreOwnership(int storeId, string? errorMessage = null)
+    {
+        if (User.IsInRole("StoreOwner"))
+        {
+            var userId = int.Parse(User.FindFirstValue(JwtRegisteredClaimNames.Sub)!);
+            if (!_groceryService.UserOwnsStore(storeId, userId))
+            {
+                return Forbid(errorMessage ?? "You do not have permission to modify this store's groceries");
+            }
+        }
+        return null;
     }
 }

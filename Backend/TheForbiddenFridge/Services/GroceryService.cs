@@ -83,12 +83,7 @@ public class GroceryService(
 
     public void DeleteGrocery(int id)
     {
-        var grocery = _groceryRepository.GetById(id);
-        if (grocery == null)
-        {
-            throw new KeyNotFoundException($"Grocery with ID {id} not found");
-        }
-
+        var grocery = _groceryRepository.GetById(id) ?? throw new KeyNotFoundException($"Grocery with ID {id} not found");
         _groceryRepository.Delete(grocery);
     }
 
@@ -100,5 +95,11 @@ public class GroceryService(
     public bool CategoryExists(int categoryId)
     {
         return _categoryRepository.GetById(categoryId) != null;
+    }
+
+    public bool UserOwnsStore(int storeId, int userId)
+    {
+        var store = _storeRepository.GetById(storeId);
+        return store?.UserId == userId;
     }
 }
