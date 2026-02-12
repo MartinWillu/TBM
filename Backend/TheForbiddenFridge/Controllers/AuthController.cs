@@ -8,11 +8,11 @@ using TheForbiddenFridge.Service;
 namespace TheForbiddenFridge.Controllers;
 
 [ApiController]
-[AllowAnonymous]
 [Route("api/[controller]")]
 public class AuthController(IUserRepository userRepository, JwtIssuerService jwtService, CryptService cryptService)
     : ControllerBase
 {
+    [AllowAnonymous]
     [HttpPost("register")]
     public IActionResult Register([FromBody] LoginDTO register)
     {
@@ -29,7 +29,7 @@ public class AuthController(IUserRepository userRepository, JwtIssuerService jwt
         return Ok("created user with username: " + register.Username);
     }
 
-
+    [AllowAnonymous]
     [HttpPost("login")]
     public IActionResult Login([FromBody] LoginDTO login)
     {
@@ -46,5 +46,12 @@ public class AuthController(IUserRepository userRepository, JwtIssuerService jwt
         }
         var token = jwtService.CreateJwt(user.Id.ToString(), user.Username, [user.Role.Name]);
         return Ok(token);
+    }
+
+    [Authorize(Roles = "Admin, StoreOwner, User")]
+    [HttpGet("verify")]
+    public IActionResult Verify()
+    {
+        return Ok("Authorized");
     }
 }

@@ -31,17 +31,18 @@ public class CategoryController(ICategoryRepository categoryRepository) : Contro
 
     }
 
-    [Authorize(Roles = "Admin, StoreOwner")]
+    [Authorize(Roles = "Admin")]
     [HttpPost]
-    public IActionResult Create([FromBody] Category category)
+    public IActionResult Create([FromBody] CategoryDTO category)
     {
-        categoryRepository.Create(category);
+        var newCategory = new Category() { Name = category.Name };
+        categoryRepository.Create(newCategory);
         return Ok("Category created");
     }
 
-    [Authorize(Roles = "Admin, StoreOwner")]
+    [Authorize(Roles = "Admin")]
     [HttpPut("{id}")]
-    public IActionResult Update(int id, [FromBody] Category category)
+    public IActionResult Update(int id, [FromBody] CategoryDTO category)
     {
         var existingCategory = categoryRepository.GetById(id);
         if (existingCategory == null)
@@ -54,7 +55,7 @@ public class CategoryController(ICategoryRepository categoryRepository) : Contro
         return Ok("Category updated");
     }
 
-    [Authorize(Roles = "Admin, StoreOwner")]
+    [Authorize(Roles = "Admin")]
     [HttpDelete("{id}")]
     public IActionResult Delete(int id)
     {
@@ -63,7 +64,7 @@ public class CategoryController(ICategoryRepository categoryRepository) : Contro
         {
             return NotFound("Category not found");
         }
-        
+
         categoryRepository.Delete(existingCategory);
         return Ok("Category deleted");
     }
