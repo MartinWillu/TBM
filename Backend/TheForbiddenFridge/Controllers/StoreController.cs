@@ -2,6 +2,7 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using TheForbiddenFridge.DTOs;
 using TheForbiddenFridge.Models;
 using TheForbiddenFridge.Repositories;
 
@@ -31,35 +32,47 @@ public class StoreController(IStoreRepository storeRepository) : ControllerBase
 
     [Authorize(Roles = "Admin, StoreOwner")]
     [HttpPost]
-    public IActionResult Create([FromBody] Store store)
+    public IActionResult Create([FromBody] StoreDTO storeDto)
     {
-        store.UserId = int.Parse(User.FindFirstValue(JwtRegisteredClaimNames.Sub));
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
+        var store = new Store
+        {
+            Name = storeDto.Name,
+            LogoUrl = storeDto.LogoUrl ?? string.Empty,
+            UserId = int.Parse(User.FindFirstValue(JwtRegisteredClaimNames.Sub)!)
+        };
+
         storeRepository.Create(store);
-        return Ok(store);
+        return CreatedAtAction(nameof(GetById), new { id = store.Id }, store);
     }
 
     [Authorize(Roles = "Admin, StoreOwner")]
     [HttpPut("{id}")]
-    public IActionResult Update(int id, [FromBody] Store store)
+    public IActionResult Update(int id, [FromBody] StoreDTO storeDto)
     {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
         var existingStore = storeRepository.GetById(id);
         if (existingStore == null)
         {
             return NotFound("Store not found");
         }
 
-        if (User.IsInRole("StoreOwner"))
+        var authResult = ValidateStoreOwnership(existingStore.UserId);
+        if (authResult != null)
         {
-            if (existingStore.UserId.ToString() != User.FindFirstValue(JwtRegisteredClaimNames.Sub))
-            {
-                return Forbid("You do not have permission to update this store");
-            }
-
-            ;
+            return authResult;
         }
 
-        existingStore.Name = store.Name;
-        existingStore.LogoUrl = store.LogoUrl;
+        existingStore.Name = storeDto.Name;
+        existingStore.LogoUrl = storeDto.LogoUrl ?? string.Empty;
         storeRepository.Update(existingStore);
 
         return Ok(existingStore);
@@ -67,23 +80,34 @@ public class StoreController(IStoreRepository storeRepository) : ControllerBase
 
     [Authorize(Roles = "Admin, StoreOwner")]
     [HttpDelete("{id}")]
-    public IActionResult Delete(int Id)
+    public IActionResult Delete(int id)
     {
-        var existingStore = storeRepository.GetById(Id);
+        var existingStore = storeRepository.GetById(id);
         if (existingStore == null)
         {
             return NotFound("Store not found");
         }
 
-        if (User.IsInRole("StoreOwner"))
+        var authResult = ValidateStoreOwnership(existingStore.UserId);
+        if (authResult != null)
         {
-            if (existingStore.UserId.ToString() != User.FindFirstValue(JwtRegisteredClaimNames.Sub))
-            {
-                return Forbid("You do not have permission to update this store");
-            }
+            return authResult;
         }
 
         storeRepository.Delete(existingStore);
-        return Ok("Deleted store with id: " + Id);
+        return NoContent();
+    }
+
+    private ForbidResult? ValidateStoreOwnership(int storeOwnerId)
+    {
+        if (User.IsInRole("StoreOwner"))
+        {
+            var userId = int.Parse(User.FindFirstValue(JwtRegisteredClaimNames.Sub)!);
+            if (storeOwnerId != userId)
+            {
+                return Forbid("You do not have permission to modify this store");
+            }
+        }
+        return null;
     }
 }
