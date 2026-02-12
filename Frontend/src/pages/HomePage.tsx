@@ -47,7 +47,7 @@ export function HomePage() {
           <section className="flex-container">
             {/* If you add more columns later, wrap each in .column */}
             <div className="column">
-              <h2>Stores</h2>
+              <h2>Your stores</h2>
               {/* If there are no stores */}
               {stores.length === 0 && <p>No stores yet.</p>}
 
@@ -58,7 +58,7 @@ export function HomePage() {
                     <img
                       className="flex-item__image"
                       src={s.logoUrl}
-                      alt={`${s.name} logo`}   // small accessibility improvement
+                      alt={`${s.name} logo`}   
                       onError={(e) =>
                       ((e.currentTarget as HTMLImageElement).style.display =
                         "none")
@@ -74,11 +74,10 @@ export function HomePage() {
               ))}
             </div>
             <div className="column">
-              {/* If there are no stores */}
-              <h2>Groceries</h2>
+             
+              <h2>Your groceries</h2>
               {groceries.length === 0 && <p>No groceries yet.</p>}
 
-              {/* Store cards */}
               {groceries.map((g) => {
                 const sale = isOnSale(g);
                 
@@ -88,7 +87,7 @@ export function HomePage() {
                       <img
                         className="flex-item__image"
                         src={g.logoUrl}
-                        alt={`${g.name} logo`}   // small accessibility improvement
+                        alt={`${g.name} logo`}   
                         onError={(e) =>
                         ((e.currentTarget as HTMLImageElement).style.display =
                           "none")
