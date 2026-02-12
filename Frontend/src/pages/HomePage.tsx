@@ -45,7 +45,6 @@ export function HomePage() {
 
         {!loading && !err && (
           <section className="flex-container">
-            {/* If you add more columns later, wrap each in .column */}
             <div className="column">
               <h2>Stores</h2>
               {/* If there are no stores */}
@@ -84,14 +83,13 @@ export function HomePage() {
                 
                 return (
                   <div className={`flex-item ${sale ? "is-sale" : ""}`} key={g.id}>
-                    {g.logoUrl && (
+                    {g.imageUrl && (
                       <img
                         className="flex-item__image"
-                        src={g.logoUrl}
+                        src={g.imageUrl}
                         alt={`${g.name} logo`}   // small accessibility improvement
                         onError={(e) =>
-                        ((e.currentTarget as HTMLImageElement).style.display =
-                          "none")
+                        ((e.currentTarget as HTMLImageElement).style.display = "none")
                         }
                       />
                     )}
