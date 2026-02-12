@@ -21,7 +21,7 @@ public class FridgeDbContext(IConfiguration config, DbContextOptions<FridgeDbCon
         {
             return;
         }
-        var databaseName = config["DatabaseName"] ?? throw new Exception("Missing environment variable DB_NAME");
+        var databaseName = config["DatabaseName"] ?? throw new Exception("Missing environment variable DatabaseUsername");
         // Skip Postgres configuration if running in test mode and is a GUID
         if (!string.IsNullOrEmpty(databaseName) && Guid.TryParse(databaseName, out _))
         {
@@ -30,11 +30,11 @@ public class FridgeDbContext(IConfiguration config, DbContextOptions<FridgeDbCon
         
         var databaseHost = config["DatabaseHost"] ?? "localhost";
         var databasePort = config["DatabasePort"] ?? "5432";
-        var databaseUsername = config["DatabaseUsername"];
-        var databasePassword = config["DatabasePassword"];
+        var databaseUsername = config["DatabaseUsername"] ?? throw new Exception("Missing environment variable DatabaseUsername");
+        var databasePassword = config["DatabasePassword"] ?? throw new Exception("Missing environment variable DatabasePassword");
         var connString =
             $"Host={databaseHost};Port={databasePort};Username={databaseUsername};Password={databasePassword};Database={databaseName}";
-
+        Console.WriteLine(connString);
         optionsBuilder.UseNpgsql(connString);
     }
 }
