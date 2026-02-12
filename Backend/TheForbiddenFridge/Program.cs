@@ -6,6 +6,7 @@ using TheForbiddenFridge.Configurations;
 using TheForbiddenFridge.DbContexts;
 using TheForbiddenFridge.Repositories;
 using TheForbiddenFridge.Service;
+using TheForbiddenFridge.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -50,11 +51,19 @@ builder.Services.AddDbContext<FridgeDbContext>();
 
 builder.Services.AddScoped<JwtIssuerService>();
 builder.Services.AddScoped<CryptService>();
+builder.Services.AddScoped<DatabaseSeeder>();
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();
 
 var app = builder.Build();
+
+// Seed the database
+using (var scope = app.Services.CreateScope())
+{
+    var seeder = scope.ServiceProvider.GetRequiredService<DatabaseSeeder>();
+    await seeder.SeedAsync();
+}
 
 app.UseAuthentication();
 app.UseAuthorization();
