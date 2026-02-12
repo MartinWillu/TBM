@@ -1,72 +1,191 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using TheForbiddenFridge.Repositories;
+﻿using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using TheForbiddenFridge.DTOs;
+using TheForbiddenFridge.Services;
 
 namespace TheForbiddenFridge.Controllers;
 
+[ApiController]
+[Route("api/[controller]")]
+public class GroceryController(IGroceryService groceryService) : ControllerBase
+{
+    private readonly IGroceryService _groceryService = groceryService;
 
-    [ApiController]
-    [Route("api/[controller]")]
-    public class GroceryController(IStoreRepository storeRepository, IGroceryRepository groceryRepository) : ControllerBase
+    [HttpGet]
+    public IActionResult GetAllGroceries()
     {
-        [HttpGet]
-        public IActionResult GetAllGroceries()
-        {
-            return Ok(groceryRepository.GetAll());
-        }
-        
-        [HttpGet]
-        public IActionResult GetAllGroceriesByStoreId(int storeId)
-        {
-            var store = storeRepository.GetById(storeId);
-            if (store == null)
-            {
-                return NotFound("Store not found");
-            }
+        var groceries = _groceryService.GetAllGroceries();
+        return Ok(groceries);
+    }
 
-            var groceries = groceryRepository.GetAll().Where(g => g.StoreId == storeId);
-            return Ok(groceries);
+    [HttpGet("store/{storeId}")]
+    public IActionResult GetAllGroceriesByStoreId(int storeId)
+    {
+        if (!_groceryService.StoreExists(storeId))
+        {
+            return NotFound("Store not found");
         }
 
-        [HttpGet]
-        public IActionResult GetAllGroceryByCategory(string categoryName)
-        { 
-            var groceries = groceryRepository.GetAll().Where(g => g.Categories.Any(c => c.Name == categoryName));
-            if (groceries != null)
-            {
-                return Ok(groceries);
-            }
+        var groceries = _groceryService.GetGroceriesByStoreId(storeId);
+        return Ok(groceries);
+    }
 
-            return NotFound("No groceries found for the specified category");
-        }
-        
-        [HttpGet]
-        public IActionResult GetAllGrocieresByStoreIdAndCategoryName(int storeId, string categoryName)
+    [HttpGet("category/{categoryName}")]
+    public IActionResult GetAllGroceryByCategory(string categoryName)
+    {
+        var groceries = _groceryService.GetGroceriesByCategory(categoryName);
+        return Ok(groceries);
+    }
+
+    [HttpGet("store/{storeId}/category/{categoryName}")]
+    public IActionResult GetAllGrocieresByStoreIdAndCategoryName(int storeId, string categoryName)
+    {
+        if (!_groceryService.StoreExists(storeId))
         {
-            var store = storeRepository.GetById(storeId);
-            if (store == null)
-            {
-                return NotFound("Store not found");
-            }
-
-            var groceries = groceryRepository.GetAll()
-                .Where(g => g.StoreId == storeId && g.Categories.Any(c => c.Name == categoryName));
-
-            if (groceries != null)
-            {
-                return Ok(groceries);
-            }
-
-            return NotFound("No groceries found for the specified category in this store");
+            return NotFound("Store not found");
         }
 
-        [HttpGet]
-        public IActionResult GetGroceryByName(string name)
+        var groceries = _groceryService.GetGroceriesByStoreIdAndCategory(storeId, categoryName);
+        return Ok(groceries);
+    }
+
+    [HttpGet("name/{name}")]
+    public IActionResult GetGroceryByName(string name)
+    {
+        var groceries = _groceryService.GetGroceriesByName(name);
+        return Ok(groceries);
+    }
+
+    [HttpGet("{id}")]
+    public IActionResult GetGroceryById(int id)
+    {
+        var grocery = _groceryService.GetGroceryById(id);
+        if (grocery == null)
         {
-            var grocery = groceryRepository.GetAll().Where(g => g.Name == name);
-            if (grocery != null)
+            return NotFound($"Grocery with ID {id} not found");
+        }
+        return Ok(grocery);
+    }
+
+    [Authorize(Roles = "Admin, StoreOwner")]
+    [HttpPost]
+    public IActionResult CreateGrocery([FromBody] GroceryDTO groceryDto)
+    {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
+        if (!_groceryService.StoreExists(groceryDto.StoreId))
+        {
+            return BadRequest($"Store with ID {groceryDto.StoreId} not found");
+        }
+
+        if (!_groceryService.CategoryExists(groceryDto.CategoryId))
+        {
+            return BadRequest($"Category with ID {groceryDto.CategoryId} not found");
+        }
+
+        var authResult = ValidateStoreOwnership(groceryDto.StoreId);
+        if (authResult != null)
+        {
+            return authResult;
+        }
+
+        var grocery = _groceryService.CreateGrocery(groceryDto);
+        return CreatedAtAction(nameof(GetGroceryById), new { id = grocery.Id }, grocery);
+    }
+
+    [Authorize(Roles = "Admin, StoreOwner")]
+    [HttpPut("{id}")]
+    public IActionResult UpdateGrocery(int id, [FromBody] GroceryDTO groceryDto)
+    {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
+        var existingGrocery = _groceryService.GetGroceryById(id);
+        if (existingGrocery == null)
+        {
+            return NotFound($"Grocery with ID {id} not found");
+        }
+
+        if (!_groceryService.StoreExists(groceryDto.StoreId))
+        {
+            return BadRequest($"Store with ID {groceryDto.StoreId} not found");
+        }
+
+        if (!_groceryService.CategoryExists(groceryDto.CategoryId))
+        {
+            return BadRequest($"Category with ID {groceryDto.CategoryId} not found");
+        }
+
+        var authResult = ValidateStoreOwnership(existingGrocery.StoreId);
+        if (authResult != null)
+        {
+            return authResult;
+        }
+
+        if (existingGrocery.StoreId != groceryDto.StoreId)
+        {
+            authResult = ValidateStoreOwnership(groceryDto.StoreId, "You do not have permission to move groceries to this store");
+            if (authResult != null)
             {
-                return Ok(grocery);
+                return authResult;
             }
-            return NotFound($"Grocery not found for this name: {name}");
+        }
+
+        try
+        {
+            var grocery = _groceryService.UpdateGrocery(id, groceryDto);
+            return Ok(grocery);
+        }
+        catch (KeyNotFoundException ex)
+        {
+            return NotFound(ex.Message);
         }
     }
+
+    [Authorize(Roles = "Admin, StoreOwner")]
+    [HttpDelete("{id}")]
+    public IActionResult DeleteGrocery(int id)
+    {
+        var grocery = _groceryService.GetGroceryById(id);
+        if (grocery == null)
+        {
+            return NotFound($"Grocery with ID {id} not found");
+        }
+
+        var authResult = ValidateStoreOwnership(grocery.StoreId);
+        if (authResult != null)
+        {
+            return authResult;
+        }
+
+        try
+        {
+            _groceryService.DeleteGrocery(id);
+            return NoContent();
+        }
+        catch (KeyNotFoundException ex)
+        {
+            return NotFound(ex.Message);
+        }
+    }
+
+    private ForbidResult? ValidateStoreOwnership(int storeId, string? errorMessage = null)
+    {
+        if (User.IsInRole("StoreOwner"))
+        {
+            var userId = int.Parse(User.FindFirstValue(JwtRegisteredClaimNames.Sub)!);
+            if (!_groceryService.UserOwnsStore(storeId, userId))
+            {
+                return Forbid(errorMessage ?? "You do not have permission to modify this store's groceries");
+            }
+        }
+        return null;
+    }
+}

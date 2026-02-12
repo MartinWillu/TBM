@@ -7,7 +7,7 @@ public class Grocery
     public int Id { get; set; }
 
     [Required]
-    [MaxLength(150)]
+    [MaxLength(100)]
     public string Name { get; set; }
     public float CurrentPrice { get; set; }
     public float OldPrice { get; set; }

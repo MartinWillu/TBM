@@ -1,23 +1,21 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using TheForbiddenFridge.Configurations;
 
 namespace TheForbiddenFridge.Service;
 
 public class JwtIssuerService
 {
-    private readonly string _jwtKey;
-    private readonly string _jwtIssuer;
-    private readonly string _jwtAudience;
+    private readonly JwtSettings _jwtSettings;
     
     private const int JwtValidMinutes = 120;
 
-    public JwtIssuerService(IConfiguration config)
+    public JwtIssuerService(IOptions<JwtSettings> jwtSettings)
     {
-        _jwtKey = config["JwtKey"] ?? throw new ArgumentNullException("JwtKey");
-        _jwtIssuer = config["JwtIssuer"] ?? throw new ArgumentNullException("JwtIssuer");
-        _jwtAudience = config["JwtAudience"] ?? throw new ArgumentNullException("JwtAudience");
+        _jwtSettings = jwtSettings.Value;
     }
 
     public string CreateJwt(string userId, string username, List<string> roles)
@@ -30,12 +28,12 @@ public class JwtIssuerService
         };
         claims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));
 
-        var key = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_jwtKey));
+        var key = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_jwtSettings.Secret));
         var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
         var token = new JwtSecurityToken(
-            issuer: _jwtIssuer,
-            audience: _jwtAudience,
+            issuer: _jwtSettings.Issuer,
+            audience: _jwtSettings.Audience,
             claims: claims,
             expires: DateTime.Now.AddMinutes(JwtValidMinutes),
             signingCredentials: credentials

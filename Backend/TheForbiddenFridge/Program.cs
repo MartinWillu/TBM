@@ -1,19 +1,18 @@
 using System.Text;
-using dotenv.net;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
+using TheForbiddenFridge.Configurations;
 using TheForbiddenFridge.DbContexts;
 using TheForbiddenFridge.Repositories;
 using TheForbiddenFridge.Service;
-
-DotEnv.Load();
+using TheForbiddenFridge.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var jwtKey = builder.Configuration["JwtKey"] ?? throw new ArgumentNullException("JwtKey");
-var jwtIssuer = builder.Configuration["JwtIssuer"] ?? throw new ArgumentNullException("JwtIssuer");
-var jwtAudience = builder.Configuration["JwtAudience"] ?? throw new ArgumentNullException("JwtAudience");
+var jwtSection = builder.Configuration.GetSection("Jwt");
+var jwtSettings = jwtSection.Get<JwtSettings>() ?? throw new InvalidOperationException("JWT settings not found in configuration");
+builder.Services.Configure<JwtSettings>(jwtSection);
 
 builder.Services.AddAuthentication(options =>
     {
@@ -24,9 +23,9 @@ builder.Services.AddAuthentication(options =>
 {
     options.TokenValidationParameters = new TokenValidationParameters()
     {
-        ValidIssuer = jwtIssuer,
-        ValidAudience = jwtAudience,
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(jwtKey)),
+        ValidIssuer = jwtSettings.Issuer,
+        ValidAudience = jwtSettings.Audience,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(jwtSettings.Secret)),
     };
 });
 
@@ -52,11 +51,23 @@ builder.Services.AddDbContext<FridgeDbContext>();
 
 builder.Services.AddScoped<JwtIssuerService>();
 builder.Services.AddScoped<CryptService>();
+builder.Services.AddScoped<DatabaseSeeder>();
+builder.Services.AddScoped<IGroceryService, GroceryService>();
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();
+builder.Services.AddScoped<IGroceryRepository, GroceryRepository>();
+builder.Services.AddScoped<IStoreRepository, StoreRepository>();
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 
 var app = builder.Build();
+
+// Seed the database
+using (var scope = app.Services.CreateScope())
+{
+    var seeder = scope.ServiceProvider.GetRequiredService<DatabaseSeeder>();
+    await seeder.SeedAsync();
+}
 
 app.UseAuthentication();
 app.UseAuthorization();
