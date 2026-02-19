@@ -1,24 +1,20 @@
 import { useEffect, useState } from "react";
-import type { Grocery, Store } from "../types";
-import { fetchGroceries, fetchStores } from "../api/fetchApi";
+import type { Grocery } from "../types";
+import { fetchGroceries } from "../api/fetchApi";
 import { formatCurrency, isOnSale } from "../utils/pricing";
 import { useNavigate } from "react-router";
 
 export function GroceryPage() {
-    const [stores, setStores] = useState<Store[]>([]);
-    const [groceries, setGroceries] = useState<Grocery[]>([]);
-    const [loading, setLoading] = useState(true);
-    const [err, setErr] = useState<string | null>(null);
-    const navigate = useNavigate();
+  const [groceries, setGroceries] = useState<Grocery[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [err, setErr] = useState<string | null>(null);
+  const navigate = useNavigate();
 
-  
+
 
   useEffect(() => {
     async function load() {
       try {
-        const storesData = await fetchStores();
-        setStores(storesData);
-
         const groceriesData = await fetchGroceries();
         setGroceries(groceriesData);
       } catch {
@@ -35,8 +31,8 @@ export function GroceryPage() {
   return (
     <>
       <header>
-        
-      <h1>Groceries</h1>
+
+        <h1>Groceries</h1>
       </header>
 
       <main>
@@ -44,25 +40,25 @@ export function GroceryPage() {
         {!loading && err && <p style={{ color: "tomato" }}>{err}</p>}
 
         {!loading && !err && (
-        <section>
+          <section>
             <div className="column">
-             
+
               <h2>Groceries</h2>
               {groceries.length === 0 && <p>No groceries yet.</p>}
 
-             
+
               {groceries.map((g) => {
                 const sale = isOnSale(g);
-                
+
                 return (
                   <div className={`flex-item ${sale ? "is-sale" : ""}`} key={g.id}
-                  onClick={() => navigate(`/`)} // clackable with redirectory
-                  style={{ cursor: "pointer" }}>
+                    onClick={() => navigate(`/`)} // clackable with redirectory
+                    style={{ cursor: "pointer" }}>
                     {g.logoUrl && (
                       <img
                         className="flex-item__image"
                         src={g.logoUrl}
-                        alt={`${g.name} logo`}   
+                        alt={`${g.name} logo`}
                         onError={(e) =>
                         ((e.currentTarget as HTMLImageElement).style.display =
                           "none")
@@ -70,7 +66,7 @@ export function GroceryPage() {
                       />
                     )}
                     <h3>{g.name}</h3>
-                    
+
                     {sale ? (
                       <p aria-label={`On sale. Now ${g.currentPrice}, was ${g.oldPrice}`}>
                         <span className="price price--current">
@@ -82,15 +78,16 @@ export function GroceryPage() {
                         <br />
                         Quantity: {g.quantity}
                       </p>
-                    ):(
+                    ) : (
                       <p>
                         Current price: {formatCurrency(g.currentPrice, "NOK", "nb-NO")}
-                        <br /> 
+                        <br />
                         Quantity: {g.quantity}
                       </p>
                     )}
                   </div>
-              )})}
+                )
+              })}
             </div>
           </section>
         )}
