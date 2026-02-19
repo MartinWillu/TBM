@@ -23,8 +23,10 @@ public class AuthController(IUserRepository userRepository, JwtIssuerService jwt
 
         string hashedPassword = cryptService.HashPassword(register.Password);
 
-        var user = new User(register.Username, hashedPassword);
-        user.Role = new Role { Name = "User" };
+        var user = new User(register.Username, hashedPassword)
+        {
+            Role = new Role { Name = "User" }
+        };
         userRepository.Create(user);
         return Ok("created user with username: " + register.Username);
     }
