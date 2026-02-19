@@ -11,8 +11,8 @@ using TheForbiddenFridge.DbContexts;
 namespace TheForbiddenFridge.Migrations
 {
     [DbContext(typeof(FridgeDbContext))]
-    [Migration("20260211141835_groceryImages")]
-    partial class groceryImages
+    [Migration("20260219135843_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -96,8 +96,8 @@ namespace TheForbiddenFridge.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(150)
-                        .HasColumnType("character varying(150)");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.Property<float>("OldPrice")
                         .HasColumnType("real");
