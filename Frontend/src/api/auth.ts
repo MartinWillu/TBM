@@ -3,7 +3,7 @@ import type { UserInfo } from "../types";
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
 export const registerUser = async (userInfo: UserInfo) => {
-    const response = await fetch("backend/api/auth/register",
+    const response = await fetch("api/auth/register",
         {
             method: "POST",
             headers: {
@@ -18,7 +18,7 @@ export const registerUser = async (userInfo: UserInfo) => {
 }
 
 export const loginUser = async (userInfo: UserInfo) => {
-    const response = await fetch("backend/api/auth/login",
+    const response = await fetch("api/auth/login",
         {
             method: "POST",
             headers: {
@@ -45,7 +45,7 @@ export const checkAuthorized = async () => {
         return false;
     }
 
-    const response = await fetch("backend/api/auth/verify", {
+    const response = await fetch("api/auth/verify", {
         method: "GET",
         headers: {
             "Authorization": `Bearer ${token}`
