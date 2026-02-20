@@ -31,7 +31,7 @@ jobs:
           cache-dependency-path: frontend/package-lock.json
 
       - name: Install Dependencies
-        run: npm i
+        run: npm ci
 
       - name: Install Playwright Browsers
         run: npx playwright install chromium
