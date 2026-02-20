@@ -27,7 +27,7 @@ public class FridgeDbContext(IConfiguration config, DbContextOptions<FridgeDbCon
         {
             return;
         }
-        
+
         var databaseHost = config["DatabaseHost"] ?? "localhost";
         var databasePort = config["DatabasePort"] ?? "5432";
         var databaseUsername = config["DatabaseUsername"] ?? throw new Exception("Missing environment variable DatabaseUsername");
@@ -36,5 +36,7 @@ public class FridgeDbContext(IConfiguration config, DbContextOptions<FridgeDbCon
             $"Host={databaseHost};Port={databasePort};Username={databaseUsername};Password={databasePassword};Database={databaseName}";
         Console.WriteLine(connString);
         optionsBuilder.UseNpgsql(connString);
+        optionsBuilder.ConfigureWarnings(w =>
+            w.Ignore(Microsoft.EntityFrameworkCore.Diagnostics.RelationalEventId.PendingModelChangesWarning));
     }
 }

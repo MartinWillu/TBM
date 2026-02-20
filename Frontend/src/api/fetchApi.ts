@@ -2,7 +2,7 @@ import type { Grocery, Store } from "../types";
 
 
 export async function fetchStores(): Promise<Store[]> {
-    const response = await fetch("backend/api/store");
+    const response = await fetch("api/store");
     if (!response.ok) {
         throw Error("Fetch all stores request failed!");
     }
@@ -11,7 +11,7 @@ export async function fetchStores(): Promise<Store[]> {
 }
 
 export async function fetchGroceries(): Promise<Grocery[]> {
-    const response = await fetch("backend/api/grocery");
+    const response = await fetch("api/grocery");
     if (!response.ok) {
         throw Error("Fetch all stores request failed!");
     }

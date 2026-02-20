@@ -93,8 +93,8 @@ namespace TheForbiddenFridge.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(150)
-                        .HasColumnType("character varying(150)");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.Property<float>("OldPrice")
                         .HasColumnType("real");
