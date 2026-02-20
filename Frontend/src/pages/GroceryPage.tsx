@@ -1,11 +1,10 @@
 import { useEffect, useState } from "react";
-import type { Grocery, Store } from "../types";
-import { fetchGroceries, fetchStores } from "../api/fetchApi";
+import type { Grocery } from "../types";
+import { fetchGroceries } from "../api/fetchApi";
 import { useNavigate } from "react-router";
-import { GroceryCard } from "../components/GroceryCard"; 
+import { GroceryCard } from "../components/GroceryCard";
 
 export function GroceryPage() {
-  const [stores, setStores] = useState<Store[]>([]);
   const [groceries, setGroceries] = useState<Grocery[]>([]);
   const [loading, setLoading] = useState(true);
   const [err, setErr] = useState<string | null>(null);
@@ -14,9 +13,6 @@ export function GroceryPage() {
   useEffect(() => {
     async function load() {
       try {
-        const storesData = await fetchStores();
-        setStores(storesData);
-
         const groceriesData = await fetchGroceries();
         setGroceries(groceriesData);
       } catch {
@@ -43,8 +39,6 @@ export function GroceryPage() {
             <div className="column">
               <h2>Groceries</h2>
               {groceries.length === 0 && <p>No groceries yet.</p>}
-
-              
               <div
                 style={{
                   display: "grid",
