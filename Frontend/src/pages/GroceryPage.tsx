@@ -26,38 +26,33 @@ export function GroceryPage() {
 
   return (
     <>
-      <header>
-        <h1>Groceries</h1>
-      </header>
+      <h1>Groceries</h1>
 
-      <main>
-        {loading && <p>Loading stores…</p>}
-        {!loading && err && <p style={{ color: "tomato" }}>{err}</p>}
+      {loading && <p>Loading groceries...</p>}
+      {!loading && err && <p style={{ color: "tomato" }}>{err}</p>}
 
-        {!loading && !err && (
-          <section>
-            <div className="column">
-              <h2>Groceries</h2>
-              {groceries.length === 0 && <p>No groceries yet.</p>}
-              <div
-                style={{
-                  display: "grid",
-                  gap: "12px",
-                  gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))",
-                }}
-              >
-                {groceries.map((g) => (
-                  <GroceryCard
-                    key={g.id}
-                    grocery={g}
-                    onClick={() => navigate(`/`)} // consider `/groceries/${g.id}` later
-                  />
-                ))}
-              </div>
+      {!loading && !err && (
+        <section>
+          <div className="column">
+            {groceries.length === 0 && <p>No groceries yet.</p>}
+            <div
+              style={{
+                display: "grid",
+                gap: "12px",
+                gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))",
+              }}
+            >
+              {groceries.map((g) => (
+                <GroceryCard
+                  key={g.id}
+                  grocery={g}
+                  onClick={() => navigate(`/`)} // consider `/groceries/${g.id}` later
+                />
+              ))}
             </div>
-          </section>
-        )}
-      </main>
+          </div>
+        </section>
+      )}
     </>
   );
 }

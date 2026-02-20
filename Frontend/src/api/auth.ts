@@ -1,7 +1,5 @@
 import type { UserInfo } from "../types";
 
-/* eslint-disable @typescript-eslint/no-unused-vars */
-
 export const registerUser = async (userInfo: UserInfo) => {
     const response = await fetch("api/auth/register",
         {

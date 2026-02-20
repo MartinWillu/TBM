@@ -12,6 +12,11 @@ dist
 dist-ssr
 *.local
 
+# Testing artifacts
+tests/__screenshots__
+temp
+tmp
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
