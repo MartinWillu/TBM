@@ -15,4 +15,8 @@ export default defineConfig({
         },
         setupFiles: ['./vitest.setup.ts'],
     },
+    optimizeDeps: {
+        include: ['react', 'react-dom', 'react-dom/client'],
+        exclude: ['vitest'],
+    },
 })
