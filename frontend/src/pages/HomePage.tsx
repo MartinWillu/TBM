@@ -59,7 +59,7 @@ export function HomePage() {
     <>
       <header>
 
-        <h1>The Forbidden Fridge</h1>
+        <h1>The Forbidden Fridge!</h1>
       </header>
 
       <main>
