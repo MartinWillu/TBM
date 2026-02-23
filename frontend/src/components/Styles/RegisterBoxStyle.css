@@ -1,0 +1,23 @@
+.register-button {
+    background-color: #51cf66;
+    color: white;
+    border: 1px solid #40c057;
+    padding: 0.6em 1.2em;
+    margin: 10px;
+    width: 100px;
+    border-radius: 8px;
+    font-size: 1em;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.25s, border-color 0.25s;
+}
+
+.register-button:hover {
+    background-color: #40c057;
+    border-color: #51cf66;
+}
+
+.register-button:focus,
+.register-button:focus-visible {
+    outline: 4px auto -webkit-focus-ring-color;
+}
