@@ -2,7 +2,9 @@ namespace TheForbiddenFridge.DTOs;
 
 public class UserInfoDTO()
 {
-    public required int Id;
-    public required string Username;
-    public required string Role;
+
+    public int Id { get; set; }
+    public string? Username { get; set; }
+    public string? Role { get; set; }
+
 }

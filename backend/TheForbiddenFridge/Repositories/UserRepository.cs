@@ -37,6 +37,10 @@ public class UserRepository(FridgeDbContext fridgeDbContext) : IUserRepository
 
     public List<UserInfoDTO> GetUserInfoDTOs()
     {
-        return [.. GetAll().Select(user => new UserInfoDTO() { Id = user.Id, Role = user.Role.Name, Username = user.Username })];
+        return [.. fridgeDbContext.Users.AsNoTracking().Select(u => new UserInfoDTO {
+            Id = u.Id,
+            Username = u.Username,
+            Role = u.Role.Name
+        })];
     }
 }
