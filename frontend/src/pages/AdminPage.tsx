@@ -1,0 +1,9 @@
+
+export function AdminPage() {
+
+    return (
+        <>
+            <h1>Welcome admin!</h1>
+        </>
+    )
+}
