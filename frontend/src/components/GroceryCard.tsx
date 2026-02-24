@@ -62,7 +62,7 @@ export function GroceryCard({ grocery, onClick, className }: Props) {
           </div>
         )}
         <div style={{ fontSize: '0.8em', marginTop: '4px', opacity: 0.8 }}>
-          Qty: {grocery.quantity}
+          Quantity: {grocery.quantity}
         </div>
       </div>
     </div>
