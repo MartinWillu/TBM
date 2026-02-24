@@ -35,12 +35,12 @@ export interface UserUpdate {
     [key: string]: string | undefined;
 }
 
-export const Role = {
+export const Roles = {
     Admin: "Admin",
     User: "User",
     StoreOwner: "StoreOwner",
 } as const;
-export type Role = typeof Role[keyof typeof Role];
+export type Role = typeof Roles[keyof typeof Roles];
 
 export interface JwtTokenClaims {
     sub: string,

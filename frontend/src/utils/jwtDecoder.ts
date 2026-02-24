@@ -1,4 +1,4 @@
-import { Role, type JwtTokenClaims } from "../types";
+import type { Role, JwtTokenClaims } from "../types";
 
 function decodeJwtPayload(token: string): JwtTokenClaims | null {
     const parts = token.split(".");
