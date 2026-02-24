@@ -1,12 +1,12 @@
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using TheForbiddenFridge.Controllers;
-using TheForbiddenFridge.DTOs;
-using TheForbiddenFridge.Services;
 using TheForbiddenFridge.Repositories;
-using TheForbiddenFridge.Models;
+
 public class UnitTestCategory
 {
+
+
     [Test]
     public async Task CreateCategoryWithInvalidData()
     {
@@ -17,7 +17,7 @@ public class UnitTestCategory
         Assert.That(result, Is.InstanceOf<BadRequestObjectResult>());
     }
 
-    //DONE
+
     [Test]
     public async Task CreateCategory()
     {
@@ -28,7 +28,7 @@ public class UnitTestCategory
         Assert.That(result, Is.InstanceOf<OkObjectResult>());
     }
 
-    //DONE
+
     [Test]
     public async Task GetCategoryById()
     {
@@ -44,6 +44,7 @@ public class UnitTestCategory
         var result = categoryController.GetById(1);
         Assert.That(result, Is.InstanceOf<OkObjectResult>());
     }
+
 
     [Test]
     public async Task DeleteCategory()

@@ -35,6 +35,10 @@ public class CategoryController(ICategoryRepository categoryRepository) : Contro
     [HttpPost]
     public IActionResult Create([FromBody] CategoryDTO category)
     {
+        if (category.Name == null || string.IsNullOrEmpty(category.Name))
+        {
+            return BadRequest("Category name is required");
+        }
         var newCategory = new Category() { Name = category.Name };
         categoryRepository.Create(newCategory);
         return Ok("Category created");
