@@ -8,23 +8,39 @@ main {
 /* Layout container for the list sections */
 .flex-container {
   display: flex;
-  flex-direction: column;     /* mobile-first: stack */
+  flex-direction: column;
+  /* mobile-first: stack */
   gap: 16px;
 }
 
 /* Switch to row on wider screens so items sit next to each other if needed */
 @media (min-width: 900px) {
   .flex-container {
-    flex-direction: row;      /* shows columns side-by-side */
+    flex-direction: row;
+    /* shows columns side-by-side */
     align-items: flex-start;
   }
 }
 
 /* Each column (you currently have just one column with the store cards) */
 .column {
-  flex: 1 1 0;                /* columns take equal width */
-  min-width: 300px;           /* prevents columns from getting too skinny */
+  flex: 1 1 0;
+  /* columns take equal width */
+  min-width: 300px;
+  /* prevents columns from getting too skinny */
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 0 0 0 170px;
 }
+
+/* Column headings alignment */
+.column h2 {
+  margin: 0 0 0 75px;
+  text-align: left;
+}
+
+
 
 /* The store card (your card container) */
 .flex-item {
@@ -34,13 +50,15 @@ main {
   margin-bottom: 20px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
   background: #595959;
-  color: #ffffff;             /* ensures text is readable on dark background */
+  color: #ffffff;
+  /* ensures text is readable on dark background */
 }
 
 /* Image styling moved out of inline style */
 .flex-item__image {
   width: 140px;
-  height: auto;               /* let height size naturally */
+  height: auto;
+  /* let height size naturally */
   object-fit: cover;
   border-radius: 10px;
   margin-bottom: 10px;
@@ -57,8 +75,9 @@ main {
   color: #ffffff;
 }
 
-.flex-item p + p {
-  margin-top: 8px;            /* space between stacked <p> elements */
+.flex-item p+p {
+  margin-top: 8px;
+  /* space between stacked <p> elements */
 }
 
 /* Optional: header spacing */
@@ -68,7 +87,8 @@ header h1 {
 
 
 .is-sale .price--current {
-  color: #0a7d00; /* green for sales */
+  color: #0a7d00;
+  /* green for sales */
   font-weight: 700;
 }
 
