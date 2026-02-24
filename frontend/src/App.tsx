@@ -8,6 +8,7 @@ import { GroceryPage } from './pages/GroceryPage'
 import { ProtectedRoute } from './utils/ProtectedRoute'
 import Navbar from './components/Navbar';
 import { logoutUser } from './api/auth'
+import { NotFoundPage } from './pages/NotFoundPage'
 
 const App: React.FC = () => {
   const navLinks = [
@@ -27,18 +28,18 @@ const App: React.FC = () => {
 
   return (
     <div>
-        <Routes>
-          <Route element={<ProtectedRoute />}>
-            <Route element={ <Navbar links={navLinks} onLogout={handleLogout} />}>
-              <Route path='/' element={<HomePage />} />
-              <Route path='/store' element={<StorePage />} />
-              <Route path='/grocery' element={<GroceryPage />} />
-            </Route>
+      <Routes>
+        <Route element={<ProtectedRoute />}>
+          <Route element={<Navbar links={navLinks} onLogout={handleLogout} />}>
+            <Route path='/' element={<HomePage />} />
+            <Route path='/store' element={<StorePage />} />
+            <Route path='/grocery' element={<GroceryPage />} />
           </Route>
-          
-           <Route path='/login' element={<LoginPage />} />
-          <Route path='/register' element={<RegisterPage />} />
-        </Routes>
+        </Route>
+        <Route path='/login' element={<LoginPage />} />
+        <Route path='/register' element={<RegisterPage />} />
+        <Route path='/*' element={<NotFoundPage />} />
+      </Routes>
     </div>
   );
 };
