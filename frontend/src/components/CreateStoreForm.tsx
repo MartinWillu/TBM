@@ -2,24 +2,32 @@ import { useState } from "react";
 import type { FormEvent } from "react";
 import { createStore } from "../api/storeOwnerApi";
 import type { Store } from "../types";
-import "./Styles/Auth.css";
+import { GenericForm } from "./GenericForm";
 
-type Props = {
+type CreateStoreFormProps = {
     onStoreCreated: (store: Store) => void;
 };
 
-export function CreateStoreForm({ onStoreCreated }: Props) {
-    const [storeName, setStoreName] = useState("");
-    const [storeLogoUrl, setStoreLogoUrl] = useState("");
+export function CreateStoreForm({ onStoreCreated }: CreateStoreFormProps) {
+    const [formData, setFormData] = useState({
+        name: "",
+        logoUrl: ""
+    });
     const [storeError, setStoreError] = useState<string | null>(null);
     const [storeSubmitting, setStoreSubmitting] = useState(false);
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+        setFormData(prev => ({ ...prev, [name]: value }));
+    };
 
     async function handleCreateStore(event: FormEvent<HTMLFormElement>) {
         event.preventDefault();
 
-        const name = storeName.trim();
+        const name = formData.name.trim();
         if (!name) {
             setStoreError("Store name is required.");
+            setTimeout(() => setStoreError(null), 3000);
             return;
         }
 
@@ -28,43 +36,44 @@ export function CreateStoreForm({ onStoreCreated }: Props) {
         try {
             const created = await createStore({
                 name,
-                logoUrl: storeLogoUrl.trim() || undefined,
+                logoUrl: formData.logoUrl.trim() || undefined,
             });
             onStoreCreated(created);
-            setStoreName("");
-            setStoreLogoUrl("");
+            setFormData({ name: "", logoUrl: "" });
         } catch (error) {
             const message =
                 error instanceof Error ? error.message : "Failed to create store.";
             setStoreError(message);
+            setTimeout(() => setStoreError(null), 3000);
         } finally {
             setStoreSubmitting(false);
         }
     }
 
+    const fields = [
+        { name: "name", placeholder: "Store name", type: "text" },
+        { name: "logoUrl", placeholder: "Logo URL (optional)", type: "text" },
+    ];
+
     return (
-        <form onSubmit={handleCreateStore} className="auth-container" style={{ margin: "20px auto", maxWidth: "420px", padding: "20px" }}>
-            <h3 className="auth-title" style={{ fontSize: "1.25rem", margin: "0 0 16px" }}>Create New Store</h3>
-            <div className="auth-input-group">
+        <GenericForm
+            title="Create New Store"
+            submitLabel="Create Store"
+            isSubmitting={storeSubmitting}
+            error={storeError}
+            onSubmit={handleCreateStore}
+        >
+            {fields.map((field) => (
                 <input
+                    key={field.name}
                     className="auth-input"
-                    type="text"
-                    value={storeName}
-                    onChange={(e) => setStoreName(e.target.value)}
-                    placeholder="Store name"
+                    name={field.name}
+                    type={field.type}
+                    placeholder={field.placeholder}
+                    value={formData[field.name as keyof typeof formData]}
+                    onChange={handleChange}
                 />
-                <input
-                    className="auth-input"
-                    type="text"
-                    value={storeLogoUrl}
-                    onChange={(e) => setStoreLogoUrl(e.target.value)}
-                    placeholder="Logo URL (optional)"
-                />
-                {storeError && <p className="error" style={{ margin: "10px 0" }}>{storeError}</p>}
-                <button type="submit" className="auth-button" disabled={storeSubmitting}>
-                    {storeSubmitting ? "Creating..." : "Create Store"}
-                </button>
-            </div>
-        </form>
+            ))}
+        </GenericForm>
     );
 }
