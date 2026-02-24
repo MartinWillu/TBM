@@ -180,7 +180,7 @@ public class GroceryController(IGroceryService groceryService) : ControllerBase
     {
         if (User.IsInRole("StoreOwner"))
         {
-            var userId = int.Parse(User.FindFirstValue(JwtRegisteredClaimNames.Sub)!);
+            var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
             if (!_groceryService.UserOwnsStore(storeId, userId))
             {
                 return Forbid(errorMessage ?? "You do not have permission to modify this store's groceries");

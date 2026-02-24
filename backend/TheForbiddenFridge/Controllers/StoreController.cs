@@ -38,12 +38,11 @@ public class StoreController(IStoreRepository storeRepository) : ControllerBase
         {
             return BadRequest(ModelState);
         }
-
         var store = new Store
         {
             Name = storeDto.Name,
             LogoUrl = storeDto.LogoUrl ?? string.Empty,
-            UserId = int.Parse(User.FindFirstValue(JwtRegisteredClaimNames.Sub)!)
+            UserId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!),
         };
 
         storeRepository.Create(store);
@@ -102,7 +101,7 @@ public class StoreController(IStoreRepository storeRepository) : ControllerBase
     {
         if (User.IsInRole("StoreOwner"))
         {
-            var userId = int.Parse(User.FindFirstValue(JwtRegisteredClaimNames.Sub)!);
+            var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
             if (storeOwnerId != userId)
             {
                 return Forbid("You do not have permission to modify this store");

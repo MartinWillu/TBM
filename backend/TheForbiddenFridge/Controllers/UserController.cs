@@ -53,7 +53,7 @@ public class UserController(IUserRepository userRepository, IRoleRepository role
     [Authorize(Roles = "Admin, StoreOwner, User")]
     public IActionResult Put([FromBody] UserUpdateDTO updatedUser)
     {
-        if (!int.TryParse(User.FindFirstValue(JwtRegisteredClaimNames.Sub), out var userId))
+        if (!int.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out var userId))
         {
             return Unauthorized("Invalid user ID in token.");
         }
@@ -83,7 +83,7 @@ public class UserController(IUserRepository userRepository, IRoleRepository role
     [Authorize(Roles = "Admin, StoreOwner, User")]
     public IActionResult Delete()
     {
-        if (!int.TryParse(User.FindFirstValue(JwtRegisteredClaimNames.Sub), out var userId))
+        if (!int.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out var userId))
         {
             return Unauthorized("Invalid user ID in token.");
         }
