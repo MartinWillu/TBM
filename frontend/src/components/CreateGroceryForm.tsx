@@ -2,6 +2,7 @@ import { useState } from "react";
 import type { FormEvent } from "react";
 import { createGrocery } from "../api/storeOwnerApi";
 import type { Grocery } from "../types";
+import "./Styles/Auth.css";
 
 type Props = {
     storeId: number;
@@ -73,16 +74,18 @@ export function CreateGroceryForm({ storeId, onGroceryCreated }: Props) {
     }
 
     return (
-        <form onSubmit={handleCreateGrocery} style={{ marginBottom: 16 }}>
-            <h2>Add grocery</h2>
-            <div style={{ display: "grid", gap: 8, maxWidth: 420 }}>
+        <form onSubmit={handleCreateGrocery} className="auth-container" style={{ margin: "20px auto", maxWidth: "420px", padding: "20px" }}>
+            <h3 className="auth-title" style={{ fontSize: "1.25rem", margin: "0 0 16px" }}>Add New Grocery</h3>
+            <div className="auth-input-group">
                 <input
+                    className="auth-input"
                     type="text"
                     value={groceryName}
                     onChange={(e) => setGroceryName(e.target.value)}
                     placeholder="Grocery name"
                 />
                 <input
+                    className="auth-input"
                     type="number"
                     min={0}
                     step="0.01"
@@ -91,6 +94,7 @@ export function CreateGroceryForm({ storeId, onGroceryCreated }: Props) {
                     placeholder="Current price"
                 />
                 <input
+                    className="auth-input"
                     type="number"
                     min={0}
                     step="0.01"
@@ -99,6 +103,7 @@ export function CreateGroceryForm({ storeId, onGroceryCreated }: Props) {
                     placeholder="Old price"
                 />
                 <input
+                    className="auth-input"
                     type="number"
                     min={0}
                     step="1"
@@ -107,12 +112,14 @@ export function CreateGroceryForm({ storeId, onGroceryCreated }: Props) {
                     placeholder="Quantity"
                 />
                 <input
+                    className="auth-input"
                     type="text"
                     value={groceryImageUrl}
                     onChange={(e) => setGroceryImageUrl(e.target.value)}
                     placeholder="Image URL (optional)"
                 />
                 <input
+                    className="auth-input"
                     type="number"
                     min={1}
                     step="1"
@@ -120,9 +127,9 @@ export function CreateGroceryForm({ storeId, onGroceryCreated }: Props) {
                     onChange={(e) => setGroceryCategoryId(e.target.value)}
                     placeholder="Category ID"
                 />
-                {groceryError && <p style={{ color: "tomato" }}>{groceryError}</p>}
-                <button type="submit" disabled={grocerySubmitting}>
-                    {grocerySubmitting ? "Adding..." : "Add grocery"}
+                {groceryError && <p className="error" style={{ margin: "10px 0" }}>{groceryError}</p>}
+                <button type="submit" className="auth-button" disabled={grocerySubmitting}>
+                    {grocerySubmitting ? "Adding..." : "Add Grocery"}
                 </button>
             </div>
         </form>

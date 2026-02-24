@@ -2,6 +2,7 @@ import { useState } from "react";
 import type { FormEvent } from "react";
 import { createStore } from "../api/storeOwnerApi";
 import type { Store } from "../types";
+import "./Styles/Auth.css";
 
 type Props = {
     onStoreCreated: (store: Store) => void;
@@ -42,24 +43,26 @@ export function CreateStoreForm({ onStoreCreated }: Props) {
     }
 
     return (
-        <form onSubmit={handleCreateStore} style={{ marginBottom: 16 }}>
-            <h2>Create store</h2>
-            <div style={{ display: "grid", gap: 8, maxWidth: 420 }}>
+        <form onSubmit={handleCreateStore} className="auth-container" style={{ margin: "20px auto", maxWidth: "420px", padding: "20px" }}>
+            <h3 className="auth-title" style={{ fontSize: "1.25rem", margin: "0 0 16px" }}>Create New Store</h3>
+            <div className="auth-input-group">
                 <input
+                    className="auth-input"
                     type="text"
                     value={storeName}
                     onChange={(e) => setStoreName(e.target.value)}
                     placeholder="Store name"
                 />
                 <input
+                    className="auth-input"
                     type="text"
                     value={storeLogoUrl}
                     onChange={(e) => setStoreLogoUrl(e.target.value)}
                     placeholder="Logo URL (optional)"
                 />
-                {storeError && <p style={{ color: "tomato" }}>{storeError}</p>}
-                <button type="submit" disabled={storeSubmitting}>
-                    {storeSubmitting ? "Creating..." : "Create store"}
+                {storeError && <p className="error" style={{ margin: "10px 0" }}>{storeError}</p>}
+                <button type="submit" className="auth-button" disabled={storeSubmitting}>
+                    {storeSubmitting ? "Creating..." : "Create Store"}
                 </button>
             </div>
         </form>

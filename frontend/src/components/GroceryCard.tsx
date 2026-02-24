@@ -1,10 +1,11 @@
 import type { Grocery } from "../types";
 import { isOnSale, formatCurrency } from "../utils/pricing";
+import "./Styles/Card.css";
 
 type Props = {
   grocery: Grocery;
-  onClick?: () => void;    
-  className?: string;      
+  onClick?: () => void;
+  className?: string;
 };
 
 export function GroceryCard({ grocery, onClick, className }: Props) {
@@ -26,58 +27,44 @@ export function GroceryCard({ grocery, onClick, className }: Props) {
         if (!onClick) return;
         if (e.key === "Enter" || e.key === " ") onClick();
       }}
-      className={`flex-item ${sale ? "is-sale" : ""} ${className ?? ""}`}
-      style={{
-        border: "1px solid #ccc",
-        padding: "12px",
-        borderRadius: "8px",
-        width: "200px",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        cursor: onClick ? "pointer" : "default",
-        backgroundColor: "#4a4343",
-        outline: "none",
-      }}
+      className={`card ${className ?? ""}`}
+      style={{ position: 'relative' }}
       aria-label={`${grocery.name}${sale ? " (On sale)" : ""}`}
     >
+      {sale && <div className="card-badge">SALE</div>}
+
       {hasImage && (
         <img
-          className="flex-item__image"
+          className="card-image"
           src={grocery.logoUrl!}
           alt={`${grocery.name} logo`}
-          style={{ width: "120px", height: "120px", objectFit: "contain" }}
           onError={(e) => ((e.currentTarget as HTMLImageElement).style.display = "none")}
         />
       )}
 
-      <h3 style={{ marginTop: 10, fontWeight: "bold", color: "#fefefe" }}>
+      <h3 className="card-title">
         {grocery.name}
       </h3>
 
-      {sale ? (
-        <p
-          style={{ marginTop: 4, color: "#fefefe", textAlign: "center" }}
-          aria-label={`On sale. Now ${currentPriceLabel}${
-            oldPriceLabel ? `, was ${oldPriceLabel}` : ""
-          }`}
-        >
-          <span className="price price--current">{currentPriceLabel}</span>{" "}
-          {oldPriceLabel && (
-            <span className="price price--old" aria-hidden="true">
-              {oldPriceLabel}
-            </span>
-          )}
-          <br />
-          Quantity: {grocery.quantity}
-        </p>
-      ) : (
-        <p style={{ marginTop: 4, color: "#fefefe", textAlign: "center" }}>
-          Current price: {currentPriceLabel}
-          <br />
-          Quantity: {grocery.quantity}
-        </p>
-      )}
+      <div className="card-details">
+        {sale ? (
+          <div aria-label={`On sale. Now ${currentPriceLabel}${oldPriceLabel ? `, was ${oldPriceLabel}` : ""}`}>
+            <span className="card-price">{currentPriceLabel}</span>
+            {oldPriceLabel && (
+              <span className="card-price old" aria-hidden="true">
+                {oldPriceLabel}
+              </span>
+            )}
+          </div>
+        ) : (
+          <div>
+            <span className="card-price">{currentPriceLabel}</span>
+          </div>
+        )}
+        <div style={{ fontSize: '0.8em', marginTop: '4px', opacity: 0.8 }}>
+          Qty: {grocery.quantity}
+        </div>
+      </div>
     </div>
   );
 }

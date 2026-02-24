@@ -1,7 +1,6 @@
 import { useState } from "react";
 import type { UserInfo } from "../types";
-import "./Styles/BoxStyle.css"
-import "./Styles/LoginBoxStyle.css"
+import "./Styles/Auth.css";
 
 interface AuthFormProps {
     onError(message: string): void;
@@ -11,7 +10,7 @@ interface AuthFormProps {
     isRegister?: boolean;
 }
 
-export function AuthForm({ onError, onSuccess, submitLabel = "Submit", children, isRegister = false }: AuthFormProps) {
+export function AuthForm({ onError, onSuccess, submitLabel = "Submit", children, isRegister }: AuthFormProps) {
     const [username, setUsername] = useState("")
     const [password, setPassword] = useState("")
 
@@ -37,13 +36,32 @@ export function AuthForm({ onError, onSuccess, submitLabel = "Submit", children,
     }
 
     return (
-        <form onSubmit={handleSubmit} className="input-box">
-            <input type="text" placeholder="Username" onChange={(event) => setUsername(event.target.value.trim())} />
-            <input type="password" placeholder="Password" onChange={(event) => setPassword(event.target.value.trim())} />
-            <div style={{ display: "flex", flexDirection: "row", justifyContent: "center", alignItems: "center" }}>
-                <button type="submit" className="login-button">{submitLabel}</button>
-                {children}
+        <form onSubmit={handleSubmit} className="auth-container">
+            <h2 className="auth-title">{submitLabel}</h2>
+            <div className="auth-input-group">
+                <input
+                    className="auth-input"
+                    type="text"
+                    placeholder="Username"
+                    value={username}
+                    onChange={(event) => setUsername(event.target.value.trim())}
+                />
+                <input
+                    className="auth-input"
+                    type="password"
+                    placeholder="Password"
+                    value={password}
+                    onChange={(event) => setPassword(event.target.value.trim())}
+                />
             </div>
+
+            <button type="submit" className="auth-button">{submitLabel}</button>
+
+            {children && (
+                <div style={{ marginTop: '16px', width: '100%', textAlign: 'center' }}>
+                    {children}
+                </div>
+            )}
         </form>
     )
 }

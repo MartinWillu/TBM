@@ -50,30 +50,34 @@ export function StorePage() {
     );
 
     return (
-      <div>
-        <button onClick={() => setSelectedStore(null)}>← Back to stores</button>
+      <div className="container">
+        <button onClick={() => setSelectedStore(null)} style={{ marginBottom: "1rem" }}>← Back to stores</button>
         <h1>{selectedStore.name} - Groceries</h1>
 
         {canManage && (
-          <CreateGroceryForm
-            storeId={selectedStore.id}
-            onGroceryCreated={(created) =>
-              setGroceriesData((prev) => [normalizeGrocery(created), ...prev])
-            }
-          />
+          <div style={{ marginBottom: "1rem" }}>
+            <CreateGroceryForm
+              storeId={selectedStore.id}
+              onGroceryCreated={(created) =>
+                setGroceriesData((prev) => [normalizeGrocery(created), ...prev])
+              }
+            />
+          </div>
         )}
 
-        {groceriesForStore.length === 0 && <p>No groceries found.</p>}
+        {groceriesForStore.length === 0 && <p className="text-center">No groceries found.</p>}
 
-        {groceriesForStore.map((g) => (
-          <GroceryCard key={g.id} grocery={g} />
-        ))}
+        <div className="card-grid">
+          {groceriesForStore.map((g) => (
+            <GroceryCard key={g.id} grocery={g} />
+          ))}
+        </div>
       </div>
     );
   }
 
   return (
-    <div>
+    <div className="container">
       <h1>Stores</h1>
 
       {canManage && (
@@ -84,7 +88,7 @@ export function StorePage() {
         />
       )}
 
-      <div style={{ marginBottom: 16 }}>
+      <div style={{ marginBottom: 16, display: 'flex', justifyContent: 'center' }}>
         <SearchBar
           value={query}
           onChange={setQuery}
@@ -92,13 +96,7 @@ export function StorePage() {
         />
       </div>
 
-      <div
-        style={{
-          display: "grid",
-          gap: 16,
-          gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))",
-        }}
-      >
+      <div className="card-grid">
         {filtered.map((store) => (
           <StoreCard key={store.id} store={store} onClick={handleStoreClick} />
         ))}

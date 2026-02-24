@@ -3,13 +3,13 @@ import { useState } from "react"
 import { loginUser } from "../api/auth"
 import type { UserInfo } from "../types"
 import { AuthForm } from "../components/AuthForm"
-import "../components/Styles/RegisterBoxStyle.css"
 
-export function LoginPage() {
+const LoginPage: React.FC = () => {
     const navigator = useNavigate()
     const [error, setError] = useState("");
 
     const handleLogin = (userInfo: UserInfo) => {
+        setError("");
         loginUser(userInfo).then(() => {
             navigator("/");
         }).catch(() => {
@@ -24,20 +24,34 @@ export function LoginPage() {
 
     const handleOnError = (message: string) => {
         setError(message);
+        setTimeout(() => setError(""), 3000);
     }
 
     return (
-        <>
-            <h1>The Forbidden Fridge</h1>
-            <h2>Login</h2>
-            <AuthForm
-                onError={handleOnError}
-                onSuccess={handleLogin}
-                submitLabel="Login"
-            >
-                <button type="button" className="register-button" onClick={handleRegisterClick}>Register</button>
-            </AuthForm>
-            {error ? <p className="error">{error}</p> : <></>}
-        </>
+        <div className="flex-center" style={{ flexDirection: 'column', minHeight: '80vh' }}>
+            <h1 className="text-center" style={{ margin: 'var(--spacing-lg) 0' }}>The Forbidden Fridge</h1>
+            <div style={{ position: 'relative', width: '100%', maxWidth: '400px' }}>
+                <AuthForm
+                    onError={handleOnError}
+                    onSuccess={handleLogin}
+                    submitLabel="Login"
+                >
+                    <div>
+                        <span style={{ opacity: 0.7, marginRight: '8px' }}>Don't have an account?</span>
+                        <button
+                            type="button"
+                            className="auth-link"
+                            style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, fontSize: 'inherit' }}
+                            onClick={handleRegisterClick}
+                        >
+                            Register
+                        </button>
+                    </div>
+                </AuthForm>
+                <p className={`auth-error-message ${error ? 'visible' : ''}`}>{error}</p>
+            </div>
+        </div>
     )
 }
+
+export { LoginPage };

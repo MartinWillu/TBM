@@ -3,31 +3,47 @@ import { AuthForm } from "../components/AuthForm";
 import type { UserInfo } from "../types";
 import { registerUser } from "../api/auth";
 import { useNavigate } from "react-router";
-import "../components/Styles/LoginBoxStyle.css"
 
-export function RegisterPage() {
+const RegisterPage: React.FC = () => {
     const [error, setError] = useState("");
     const navigator = useNavigate();
 
-    const handleOnError = (message: string) => {
+    const handleError = (message: string) => {
         setError(message)
+        setTimeout(() => setError(""), 3000);
     }
 
     const handleSubmit = (userInfo: UserInfo) => {
+        setError("");
         registerUser(userInfo).then(() => {
             navigator("/login");
         }).catch((e: Error) => {
             setError(e.message);
+            setTimeout(() => setError(""), 3000);
         })
     }
 
     return (
-        <>
-            <h1>The Forbidden Fridge</h1>
-            <h2>Register</h2>
-            <AuthForm onError={handleOnError} onSuccess={handleSubmit} submitLabel="Create!" isRegister={true} />
-            <a style={{ cursor: "pointer" }} onClick={() => navigator("/login")}><p>Already have an account?</p></a>
-            {error ? <p className="error">{error}</p> : <></>}
-        </>
+        <div className="flex-center" style={{ flexDirection: 'column', minHeight: '80vh' }}>
+            <h1 className="text-center" style={{ margin: 'var(--spacing-lg) 0' }}>The Forbidden Fridge</h1>
+            <div style={{ position: 'relative', width: '100%', maxWidth: '400px' }}>
+                <AuthForm onError={handleError} onSuccess={handleSubmit} submitLabel="Register" isRegister={true}>
+                    <div>
+                        <span style={{ opacity: 0.7, marginRight: '8px' }}>Already have an account?</span>
+                        <button
+                            type="button"
+                            className="auth-link"
+                            style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, fontSize: 'inherit' }}
+                            onClick={() => navigator("/login")}
+                        >
+                            Login
+                        </button>
+                    </div>
+                </AuthForm>
+                <p className={`auth-error-message ${error ? 'visible' : ''}`}>{error}</p>
+            </div>
+        </div>
     )
 }
+
+export { RegisterPage };
