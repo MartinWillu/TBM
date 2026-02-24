@@ -51,3 +51,9 @@ export interface JwtTokenClaims {
     iss: string,
     aud: string,
 }
+
+export interface UserRoleInfo {
+    id: number,
+    username: string,
+    role: Role
+}
