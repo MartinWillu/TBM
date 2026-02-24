@@ -1,4 +1,5 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -52,9 +53,17 @@ public class GroceryController(IGroceryService groceryService) : ControllerBase
     }
 
     [HttpGet("name/{name}")]
-    public IActionResult GetGroceryByName(string name)
+    public IActionResult GetGroceriesByName(string name)
     {
+        if (string.IsNullOrEmpty(name))
+        {
+            return BadRequest("Grocery name is required");
+        }
         var groceries = _groceryService.GetGroceriesByName(name);
+        if (groceries == null || !groceries.Any())
+        {
+            return NotFound("No groceries found for the given name");
+        }
         return Ok(groceries);
     }
 

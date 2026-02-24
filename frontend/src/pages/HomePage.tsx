@@ -70,7 +70,7 @@ export function HomePage() {
           <section className="flex-container">
 
             <div className="column">
-              <h2>Your stores</h2>
+              <h2>Stores</h2>
 
 
 
@@ -82,7 +82,7 @@ export function HomePage() {
             </div>
             <div className="column">
 
-              <h2>Your groceries</h2>
+              <h2>Groceries</h2>
               {groceriesData.length === 0 && <p>No groceries yet.</p>}
 
               {groceriesData.map((g) => {
