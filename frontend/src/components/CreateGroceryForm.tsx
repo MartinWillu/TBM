@@ -10,9 +10,9 @@ type Props = {
 
 export function CreateGroceryForm({ storeId, onGroceryCreated }: Props) {
     const [groceryName, setGroceryName] = useState("");
-    const [groceryPrice, setGroceryPrice] = useState("0");
-    const [groceryOldPrice, setGroceryOldPrice] = useState("0");
-    const [groceryQuantity, setGroceryQuantity] = useState("1");
+    const [groceryPrice, setGroceryPrice] = useState("");
+    const [groceryOldPrice, setGroceryOldPrice] = useState("");
+    const [groceryQuantity, setGroceryQuantity] = useState("");
     const [groceryImageUrl, setGroceryImageUrl] = useState("");
     const [groceryCategoryId, setGroceryCategoryId] = useState("");
     const [groceryError, setGroceryError] = useState<string | null>(null);
@@ -58,9 +58,9 @@ export function CreateGroceryForm({ storeId, onGroceryCreated }: Props) {
             });
             onGroceryCreated(created);
             setGroceryName("");
-            setGroceryPrice("0");
-            setGroceryOldPrice("0");
-            setGroceryQuantity("1");
+            setGroceryPrice("");
+            setGroceryOldPrice("");
+            setGroceryQuantity("");
             setGroceryImageUrl("");
             setGroceryCategoryId("");
         } catch (error) {
