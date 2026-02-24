@@ -1,16 +1,22 @@
-
 import { useMemo, useState, useEffect } from "react";
 import { StoreCard } from "../components/StoreCard";
 import { SearchBar } from "../components/SearchBar";
 import { fetchStores, fetchGroceries } from "../api/fetchApi";
 import { GroceryCard } from "../components/GroceryCard";
+import { CreateStoreForm } from "../components/CreateStoreForm";
+import { CreateGroceryForm } from "../components/CreateGroceryForm";
+import { decodeRole } from "../utils/jwtDecoder";
 import type { Store, Grocery } from "../types";
+import { Roles } from "../types";
 
 export function StorePage() {
   const [query, setQuery] = useState("");
   const [storesData, setStoresData] = useState<Store[]>([]);
   const [groceriesData, setGroceriesData] = useState<Grocery[]>([]);
   const [selectedStore, setSelectedStore] = useState<Store | null>(null);
+
+  const role = decodeRole();
+  const canManage = role === Roles.Admin || role === Roles.StoreOwner;
 
   useEffect(() => {
     async function load() {
@@ -32,6 +38,11 @@ export function StorePage() {
     setSelectedStore(store);
   }
 
+  function normalizeGrocery(grocery: Grocery) {
+    const record = grocery as Grocery & { imageUrl?: string };
+    if (record.logoUrl) return record;
+    return { ...record, logoUrl: record.imageUrl ?? "" };
+  }
 
   if (selectedStore) {
     const groceriesForStore = groceriesData.filter(
@@ -43,12 +54,19 @@ export function StorePage() {
         <button onClick={() => setSelectedStore(null)}>← Back to stores</button>
         <h1>{selectedStore.name} - Groceries</h1>
 
-        {groceriesForStore.length === 0 && <p>No groceries found.</p>}
+        {canManage && (
+          <CreateGroceryForm
+            storeId={selectedStore.id}
+            onGroceryCreated={(created) =>
+              setGroceriesData((prev) => [normalizeGrocery(created), ...prev])
+            }
+          />
+        )}
 
+        {groceriesForStore.length === 0 && <p>No groceries found.</p>}
 
         {groceriesForStore.map((g) => (
           <GroceryCard key={g.id} grocery={g} />
-
         ))}
       </div>
     );
@@ -58,8 +76,20 @@ export function StorePage() {
     <div>
       <h1>Stores</h1>
 
+      {canManage && (
+        <CreateStoreForm
+          onStoreCreated={(created) =>
+            setStoresData((prev) => [created, ...prev])
+          }
+        />
+      )}
+
       <div style={{ marginBottom: 16 }}>
-        <SearchBar value={query} onChange={setQuery} placeholder="Search by name" />
+        <SearchBar
+          value={query}
+          onChange={setQuery}
+          placeholder="Search by name"
+        />
       </div>
 
       <div
@@ -70,11 +100,7 @@ export function StorePage() {
         }}
       >
         {filtered.map((store) => (
-          <StoreCard
-            key={store.id}
-            store={store}
-            onClick={handleStoreClick}
-          />
+          <StoreCard key={store.id} store={store} onClick={handleStoreClick} />
         ))}
       </div>
     </div>
