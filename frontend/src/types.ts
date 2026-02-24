@@ -34,3 +34,20 @@ export interface UserUpdate {
     username?: string;
     [key: string]: string | undefined;
 }
+
+export const Role = {
+    Admin: "Admin",
+    User: "User",
+    StoreOwner: "StoreOwner",
+} as const;
+export type Role = typeof Role[keyof typeof Role];
+
+export interface JwtTokenClaims {
+    sub: string,
+    name: string,
+    jti: string
+    "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": Role,
+    exp: number,
+    iss: string,
+    aud: string,
+}
