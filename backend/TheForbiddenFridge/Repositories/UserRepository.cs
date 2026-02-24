@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using TheForbiddenFridge.DbContexts;
+using TheForbiddenFridge.DTOs;
 using TheForbiddenFridge.Models;
 
 namespace TheForbiddenFridge.Repositories;
@@ -32,5 +33,10 @@ public class UserRepository(FridgeDbContext fridgeDbContext) : IUserRepository
     public IEnumerable<User> GetAll()
     {
         return fridgeDbContext.Users.Include(u => u.Role);
+    }
+
+    public List<UserInfoDTO> GetUserInfoDTOs()
+    {
+        return [.. GetAll().Select(user => new UserInfoDTO() { Id = user.Id, Role = user.Role.Name, Username = user.Username })];
     }
 }
