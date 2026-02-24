@@ -41,6 +41,11 @@ public class UserController(IUserRepository userRepository, IRoleRepository role
         {
             return NotFound($"Role with name {role} not found.");
         }
+
+        targetUser.Role = savedRole;
+        targetUser.RoleId = savedRole.Id;
+        userRepository.Update(targetUser);
+
         return Ok($"Updated {targetUser.Username} with role {savedRole.Name}!");
     }
 
