@@ -40,7 +40,7 @@ export function StorePage() {
 
   function normalizeGrocery(grocery: Grocery) {
     const record = grocery as Grocery & { imageUrl?: string };
-    if (record.logoUrl) return record;
+    if (record.imageUrl) return record;
     return { ...record, logoUrl: record.imageUrl ?? "" };
   }
 
