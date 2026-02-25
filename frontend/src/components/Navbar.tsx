@@ -1,6 +1,7 @@
 import React from 'react';
 import './Styles/NavbarStyle.css';
 import { Outlet, useNavigate } from 'react-router';
+import { Footer } from './Footer';
 
 export type NavBarLink = {
   text: string;
@@ -15,12 +16,12 @@ type NavbarProps = {
 const Navbar: React.FC<NavbarProps> = ({ links }) => {
   const navigator = useNavigate();
   return (
-    <>
-      <nav>
-        <ul>
+    <div className="app-layout">
+      <nav className="navbar">
+        <ul className="navbar-list">
           {links.map((link, index) => (
-            <li key={index}>
-              <button className={`nav-${link.text.toLowerCase()}`}
+            <li key={index} className="navbar-item">
+              <button className={`nav-button nav-${link.text.toLowerCase()}`}
                 onClick={() => {
                   if (link.onClickAction) {
                     link.onClickAction();
@@ -32,8 +33,11 @@ const Navbar: React.FC<NavbarProps> = ({ links }) => {
           ))}
         </ul>
       </nav>
-      <Outlet />
-    </>
+      <main className="main-content">
+        <Outlet />
+      </main>
+      <Footer />
+    </div>
   );
 };
 

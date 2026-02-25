@@ -3,31 +3,44 @@ import { AuthForm } from "../components/AuthForm";
 import type { UserInfo } from "../types";
 import { registerUser } from "../api/auth";
 import { useNavigate } from "react-router";
-import "../components/Styles/LoginBoxStyle.css"
 
 export function RegisterPage() {
     const [error, setError] = useState("");
     const navigator = useNavigate();
 
-    const handleOnError = (message: string) => {
+    const handleError = (message: string) => {
         setError(message)
+        setTimeout(() => setError(""), 3000);
     }
 
     const handleSubmit = (userInfo: UserInfo) => {
+        setError("");
         registerUser(userInfo).then(() => {
             navigator("/login");
         }).catch((e: Error) => {
             setError(e.message);
+            setTimeout(() => setError(""), 3000);
         })
     }
 
     return (
-        <>
-            <h1>The Forbidden Fridge</h1>
-            <h2>Register</h2>
-            <AuthForm onError={handleOnError} onSuccess={handleSubmit} submitLabel="Create!" isRegister={true} />
-            <a style={{ cursor: "pointer" }} onClick={() => navigator("/login")}><p>Already have an account?</p></a>
-            {error ? <p className="error">{error}</p> : <></>}
-        </>
+        <div className="form-page-container">
+            <h1 className="form-page-title">The Forbidden Fridge</h1>
+            <div className="form-wrapper">
+                <AuthForm onError={handleError} onSuccess={handleSubmit} submitLabel="Register" isRegister={true}>
+                    <div>
+                        <span className="form-toggle-text">Already have an account?</span>
+                        <button
+                            type="button"
+                            className="form-link form-toggle-btn"
+                            onClick={() => navigator("/login")}
+                        >
+                            Login
+                        </button>
+                    </div>
+                </AuthForm>
+                <p className={`form-error-message ${error ? 'visible' : ''}`}>{error}</p>
+            </div>
+        </div>
     )
 }

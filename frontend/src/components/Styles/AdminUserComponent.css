@@ -1,0 +1,43 @@
+.admin-user-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    gap: 10px;
+    padding: var(--spacing-sm);
+}
+
+.admin-user-username {
+    font-weight: bold;
+    font-size: 1.2rem;
+    color: var(--text-color);
+}
+
+.admin-user-id {
+    font-size: 0.9rem;
+    color: var(--text-color);
+    opacity: 0.6;
+}
+
+.admin-role-label {
+    width: 100%;
+    margin-top: 10px;
+    font-size: 0.9rem;
+    color: var(--text-color);
+}
+
+.admin-role-select {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border-color);
+    background-color: var(--input-bg);
+    color: var(--text-color);
+    cursor: pointer;
+}
+
+.admin-role-select:focus {
+    outline: 2px solid var(--primary-color);
+    border-color: transparent;
+}

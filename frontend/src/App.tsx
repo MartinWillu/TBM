@@ -11,8 +11,9 @@ import { NotFoundPage } from './pages/NotFoundPage'
 import { decodeRole } from './utils/jwtDecoder'
 import { AdminPage } from './pages/AdminPage'
 import { logoutUser } from './api/auth'
+import { ThemeToggle } from './components/ThemeToggle'
 
-const App: React.FC = () => {
+export default function App() {
   const links: NavBarLink[] = [
     { text: 'Home', url: '/' },
     { text: 'Store', url: '/store' },
@@ -26,6 +27,7 @@ const App: React.FC = () => {
 
   return (
     <div>
+      <ThemeToggle />
       <Routes>
         <Route element={<ProtectedRoute />}>
           <Route element={<Navbar links={links} />}>
@@ -42,5 +44,3 @@ const App: React.FC = () => {
     </div>
   );
 };
-
-export default App

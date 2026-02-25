@@ -1,99 +1,49 @@
-/* src/styles/HomePage.css */
-
-/* Page structure (optional but nice to centralize spacing) */
-main {
-  padding: 16px;
-}
-
-/* Layout container for the list sections */
-.flex-container {
+.home-container {
   display: flex;
   flex-direction: column;
-  /* mobile-first: stack */
-  gap: 16px;
+  gap: var(--spacing-lg);
+  padding: var(--spacing-md) 0;
 }
 
-/* Switch to row on wider screens so items sit next to each other if needed */
 @media (min-width: 900px) {
-  .flex-container {
+  .home-container {
     flex-direction: row;
-    /* shows columns side-by-side */
     align-items: flex-start;
   }
 }
 
-/* Each column (you currently have just one column with the store cards) */
-.column {
-  flex: 1 1 0;
-  /* columns take equal width */
-  min-width: 300px;
-  /* prevents columns from getting too skinny */
+.home-column {
+  flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  margin: 0 0 0 170px;
+  gap: var(--spacing-md);
+  min-width: 0;
+  /* Prevent flex item from overflowing */
 }
 
-/* Column headings alignment */
-.column h2 {
-  margin: 0 0 0 75px;
-  text-align: left;
+.home-section-title {
+  font-size: 1.5rem;
+  margin-bottom: var(--spacing-sm);
+  text-align: center;
+  color: var(--text-color);
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: var(--spacing-sm);
 }
 
-
-
-/* The store card (your card container) */
-.flex-item {
-  border: 1px solid #d36464;
-  border-radius: 12px;
-  padding: 16px;
-  margin-bottom: 20px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
-  background: #595959;
-  color: #ffffff;
-  /* ensures text is readable on dark background */
-}
-
-/* Image styling moved out of inline style */
-.flex-item__image {
-  width: 140px;
-  height: auto;
-  /* let height size naturally */
-  object-fit: cover;
-  border-radius: 10px;
-  margin-bottom: 10px;
-}
-
-/* Headings and paragraphs inside the card */
-.flex-item h3 {
-  margin: 0 0 6px;
-  color: #ffffff;
-}
-
-.flex-item p {
+.home-hero {
+  background-color: var(--card-bg);
+  width: 100%;
   margin: 0;
-  color: #ffffff;
+  /* Extra top padding for more breathing room */
+  padding: calc(var(--spacing-xl)) 0 calc(var(--spacing-xl)) 0;
+  margin-bottom: var(--spacing-lg);
+  border-bottom: 1px solid var(--border-color);
+  text-align: center;
 }
 
-.flex-item p+p {
-  margin-top: 8px;
-  /* space between stacked <p> elements */
-}
-
-/* Optional: header spacing */
-header h1 {
-  margin: 0 0 16px;
-}
-
-
-.is-sale .price--current {
-  color: #0a7d00;
-  /* green for sales */
-  font-weight: 700;
-}
-
-.is-sale .price--old {
-  color: #888;
-  text-decoration: line-through;
-  margin-left: 0.5rem;
+.home-hero h1 {
+  font-size: 3rem;
+  margin: 0 0 var(--spacing-sm) 0;
+  color: var(--accent-light);
+  text-shadow: 0 0 10px rgba(var(--accent-rgb), 0.3);
 }

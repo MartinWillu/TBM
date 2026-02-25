@@ -30,17 +30,27 @@ export function AdminPage() {
         updateStoredInfo();
     }, [])
 
+    if (role !== "Admin") {
+        return (
+            <div className="container flex-center" style={{ flexDirection: 'column', height: '50vh' }}>
+                <h1 style={{ color: 'var(--error-color)' }}>INTRUDER!</h1>
+                <p>You do not have permission to view this page.</p>
+            </div>
+        )
+    }
+
     return (
-        <>
-            {role === "Admin" ? <h1>Welcome admin!</h1> : <h1>INTRUDER!</h1>}
-            {statusMsg && <p>{statusMsg}</p>}
-            <ul>
-                {userRoleInfos.map(userInfo => {
-                    return <li key={userInfo.id}>
-                        <AdminUserComponent user={userInfo} onRoleChange={handleRoleChange} />
-                    </li>
-                })}
-            </ul>
-        </>
+        <div className="container">
+            <h1>Admin Dashboard</h1>
+            {statusMsg && <p className="text-center" style={{ marginBottom: 'var(--spacing-md)', color: 'var(--secondary-color)' }}>{statusMsg}</p>}
+
+            <div className="card-grid">
+                {userRoleInfos.map(userInfo => (
+                    <div key={userInfo.id} className="card" style={{ padding: 'var(--spacing-md)', minHeight: 'auto', width: '100%', maxWidth: '300px' }}>
+                        <AdminUserComponent user={userInfo} onRoleChange={(id, role) => handleRoleChange(id, role)} />
+                    </div>
+                ))}
+            </div>
+        </div>
     )
 }

@@ -2,46 +2,51 @@ import { useState } from "react";
 import type { FormEvent } from "react";
 import { createGrocery } from "../api/storeOwnerApi";
 import type { Grocery } from "../types";
+import { GenericForm } from "./GenericForm";
 
-type Props = {
+type CreateGroceryFormProps = {
     storeId: number;
     onGroceryCreated: (grocery: Grocery) => void;
 };
 
-export function CreateGroceryForm({ storeId, onGroceryCreated }: Props) {
-    const [groceryName, setGroceryName] = useState("");
-    const [groceryPrice, setGroceryPrice] = useState("");
-    const [groceryOldPrice, setGroceryOldPrice] = useState("");
-    const [groceryQuantity, setGroceryQuantity] = useState("");
-    const [groceryImageUrl, setGroceryImageUrl] = useState("");
-    const [groceryCategoryId, setGroceryCategoryId] = useState("");
+export function CreateGroceryForm({ storeId, onGroceryCreated }: CreateGroceryFormProps) {
+    const [formData, setFormData] = useState({
+        name: "",
+        currentPrice: "",
+        oldPrice: "",
+        quantity: "",
+        imageUrl: "",
+        categoryId: ""
+    });
     const [groceryError, setGroceryError] = useState<string | null>(null);
     const [grocerySubmitting, setGrocerySubmitting] = useState(false);
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+        setFormData(prev => ({ ...prev, [name]: value }));
+    };
 
     async function handleCreateGrocery(event: FormEvent<HTMLFormElement>) {
         event.preventDefault();
 
-        const name = groceryName.trim();
-        const currentPrice = Number(groceryPrice);
-        const oldPrice = Number(groceryOldPrice || 0);
-        const quantity = Number(groceryQuantity);
-        const categoryId = Number(groceryCategoryId);
+        const name = formData.name.trim();
+        const currentPrice = Number(formData.currentPrice);
+        const oldPrice = Number(formData.oldPrice || 0);
+        const quantity = Number(formData.quantity);
+        const categoryId = Number(formData.categoryId);
+        const validations = [
+            { condition: !name, message: "Grocery name is required." },
+            { condition: !Number.isFinite(currentPrice) || currentPrice < 0, message: "Current price must be 0 or higher." },
+            { condition: !Number.isFinite(quantity) || quantity < 0, message: "Quantity must be 0 or higher." },
+            { condition: !Number.isFinite(categoryId) || categoryId <= 0, message: "Category ID must be a positive number." },
+        ];
 
-        if (!name) {
-            setGroceryError("Grocery name is required.");
-            return;
-        }
-        if (!Number.isFinite(currentPrice) || currentPrice < 0) {
-            setGroceryError("Current price must be 0 or higher.");
-            return;
-        }
-        if (!Number.isFinite(quantity) || quantity < 0) {
-            setGroceryError("Quantity must be 0 or higher.");
-            return;
-        }
-        if (!Number.isFinite(categoryId) || categoryId <= 0) {
-            setGroceryError("Category ID must be a positive number.");
-            return;
+        for (const { condition, message } of validations) {
+            if (condition) {
+                setGroceryError(message);
+                setTimeout(() => setGroceryError(null), 3000);
+                return;
+            }
         }
 
         setGrocerySubmitting(true);
@@ -52,79 +57,58 @@ export function CreateGroceryForm({ storeId, onGroceryCreated }: Props) {
                 currentPrice,
                 oldPrice: Number.isFinite(oldPrice) && oldPrice > 0 ? oldPrice : 0,
                 quantity,
-                imageUrl: groceryImageUrl.trim() || undefined,
+                imageUrl: formData.imageUrl.trim() || undefined,
                 storeId,
                 categoryId,
             });
             onGroceryCreated(created);
-            setGroceryName("");
-            setGroceryPrice("");
-            setGroceryOldPrice("");
-            setGroceryQuantity("");
-            setGroceryImageUrl("");
-            setGroceryCategoryId("");
+            setFormData({
+                name: "",
+                currentPrice: "",
+                oldPrice: "",
+                quantity: "",
+                imageUrl: "",
+                categoryId: ""
+            });
         } catch (error) {
-            const message =
-                error instanceof Error ? error.message : "Failed to create grocery.";
+            const message = error instanceof Error ? error.message : "Failed to create grocery.";
             setGroceryError(message);
+            setTimeout(() => setGroceryError(null), 3000);
         } finally {
             setGrocerySubmitting(false);
         }
     }
 
+    const fields = [
+        { name: "name", placeholder: "Grocery name", type: "text" },
+        { name: "currentPrice", placeholder: "Current price", type: "number", min: 0, step: 0.01 },
+        { name: "oldPrice", placeholder: "Old price", type: "number", min: 0, step: 0.01 },
+        { name: "quantity", placeholder: "Quantity", type: "number", min: 0, step: 1 },
+        { name: "imageUrl", placeholder: "Image URL (optional)", type: "text" },
+        { name: "categoryId", placeholder: "Category ID", type: "number", min: 1, step: 1 },
+    ];
+
     return (
-        <form onSubmit={handleCreateGrocery} style={{ marginBottom: 16 }}>
-            <h2>Add grocery</h2>
-            <div style={{ display: "grid", gap: 8, maxWidth: 420 }}>
+        <GenericForm
+            title="Add New Grocery"
+            submitLabel="Add Grocery"
+            isSubmitting={grocerySubmitting}
+            error={groceryError}
+            onSubmit={handleCreateGrocery}
+        >
+            {fields.map((field) => (
                 <input
-                    type="text"
-                    value={groceryName}
-                    onChange={(e) => setGroceryName(e.target.value)}
-                    placeholder="Grocery name"
+                    key={field.name}
+                    className="form-input"
+                    name={field.name}
+                    type={field.type}
+                    placeholder={field.placeholder}
+                    value={formData[field.name as keyof typeof formData]}
+                    onChange={handleChange}
+                    min={field.min}
+                    step={field.step}
                 />
-                <input
-                    type="number"
-                    min={0}
-                    step="0.01"
-                    value={groceryPrice}
-                    onChange={(e) => setGroceryPrice(e.target.value)}
-                    placeholder="Current price"
-                />
-                <input
-                    type="number"
-                    min={0}
-                    step="0.01"
-                    value={groceryOldPrice}
-                    onChange={(e) => setGroceryOldPrice(e.target.value)}
-                    placeholder="Old price"
-                />
-                <input
-                    type="number"
-                    min={0}
-                    step="1"
-                    value={groceryQuantity}
-                    onChange={(e) => setGroceryQuantity(e.target.value)}
-                    placeholder="Quantity"
-                />
-                <input
-                    type="text"
-                    value={groceryImageUrl}
-                    onChange={(e) => setGroceryImageUrl(e.target.value)}
-                    placeholder="Image URL (optional)"
-                />
-                <input
-                    type="number"
-                    min={1}
-                    step="1"
-                    value={groceryCategoryId}
-                    onChange={(e) => setGroceryCategoryId(e.target.value)}
-                    placeholder="Category ID"
-                />
-                {groceryError && <p style={{ color: "tomato" }}>{groceryError}</p>}
-                <button type="submit" disabled={grocerySubmitting}>
-                    {grocerySubmitting ? "Adding..." : "Add grocery"}
-                </button>
-            </div>
-        </form>
+            ))}
+        </GenericForm>
     );
 }

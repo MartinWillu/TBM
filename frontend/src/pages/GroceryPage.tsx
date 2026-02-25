@@ -32,16 +32,11 @@ export function GroceryPage() {
       {!loading && err && <p style={{ color: "tomato" }}>{err}</p>}
 
       {!loading && !err && (
-        <section>
-          <div className="column">
-            {groceries.length === 0 && <p>No groceries yet.</p>}
-            <div
-              style={{
-                display: "grid",
-                gap: "12px",
-                gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))",
-              }}
-            >
+        <section className="container">
+          <div className="flex-center" style={{ flexDirection: 'column' }}>
+            {groceries.length === 0 && <p className="text-center">No groceries yet.</p>}
+
+            <div className="card-grid">
               {groceries.map((g) => (
                 <GroceryCard
                   key={g.id}
