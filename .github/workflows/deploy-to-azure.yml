@@ -1,0 +1,43 @@
+name: Deploy to Azure Container Instances
+
+on:
+    workflow_run:
+        workflows: ["Publish backend to GHCR", "Publish frontend to GHCR"]
+        types:
+            - completed
+    workflow_dispatch:
+
+jobs:
+    deploy:
+        runs-on: ubuntu-latest
+        if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
+
+        steps:
+            - name: Azure Login
+              uses: azure/login@v2
+              with:
+                  creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+            - name: Checkout repository
+              uses: actions/checkout@v4
+
+            - name: Inject Secrets into Configuration
+              env:
+                POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
+                POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+                POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+                JWT_SECRET: ${{ secrets.JWT_SECRET }}
+              run: |
+                sed -i "s/\${POSTGRES_DB}/${POSTGRES_DB}/g" ./azure.yml
+                sed -i "s/\${POSTGRES_USER}/${POSTGRES_USER}/g" ./azure.yml
+                sed -i "s/\${POSTGRES_PASSWORD}/${POSTGRES_PASSWORD}/g" ./azure.yml
+                sed -i "s/\${JWT_SECRET}/${JWT_SECRET}/g" ./azure.yml
+
+            - name: Deploy to Azure Container Instances
+              uses: azure/aci-deploy@v1
+              with:
+                  resource-group: ${{ secrets.AZURE_RESOURCE_GROUP }}
+                  dns-name-label: ${{ secrets.AZURE_DNS_LABEL }}
+                  name: tbm-container-group
+                  location: norwayeast
+                  configuration-file: ./azure.yml

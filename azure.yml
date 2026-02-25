@@ -1,0 +1,62 @@
+apiVersion: 2019-12-01
+location: norwayeast
+name: tbm-container-group
+properties:
+  containers:
+    - name: postgres
+      properties:
+        image: postgres:latest
+        environmentVariables:
+          - name: POSTGRES_DB
+            value: ${POSTGRES_DB}
+          - name: POSTGRES_USER
+            value: ${POSTGRES_USER}
+          - name: POSTGRES_PASSWORD
+            secureValue: ${POSTGRES_PASSWORD}
+        resources:
+          requests:
+            cpu: 1
+            memoryInGb: 1.5
+        ports:
+          - port: 5432
+    - name: backend
+      properties:
+        image: ghcr.io/martinwillu/tbm/backend:main
+        environmentVariables:
+          - name: DatabaseName
+            value: ${POSTGRES_DB}
+          - name: DatabaseUsername
+            value: ${POSTGRES_USER}
+          - name: DatabasePassword
+            secureValue: ${POSTGRES_PASSWORD}
+          - name: DatabasePort
+            value: 5432
+          - name: DatabaseHost
+            value: localhost
+          - name: Jwt__Secret
+            secureValue: ${JWT_SECRET}
+          - name: ASPNETCORE_URLS
+            value: http://+:5200
+        resources:
+          requests:
+            cpu: 1
+            memoryInGb: 1.5
+        ports:
+          - port: 5200
+    - name: frontend
+      properties:
+        image: ghcr.io/martinwillu/tbm/frontend:main
+        resources:
+          requests:
+            cpu: 1
+            memoryInGb: 1.5
+        ports:
+          - port: 80
+  osType: Linux
+  ipAddress:
+    type: Public
+    ports:
+      - protocol: tcp
+        port: 80
+tags: { project: TBM }
+type: Microsoft.ContainerInstance/containerGroups
