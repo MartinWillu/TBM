@@ -6,7 +6,7 @@ namespace TheForbiddenFridge.Repositories;
 public class RoleRepository(FridgeDbContext context) : IRoleRepository
 {
     public void Create(Role user)
-    {   
+    {
         context.Roles.Add(user);
         context.SaveChanges();
     }
@@ -25,11 +25,16 @@ public class RoleRepository(FridgeDbContext context) : IRoleRepository
 
     public Role? GetById(int id)
     {
-        return context.Roles.FirstOrDefault(role => role.Id == id );
+        return context.Roles.FirstOrDefault(role => role.Id == id);
     }
 
     public IEnumerable<Role> GetAll()
     {
         return context.Roles;
+    }
+
+    public Role? GetRoleByName(string name)
+    {
+        return context.Roles.FirstOrDefault(role => role.Name == name);
     }
 }

@@ -42,10 +42,10 @@ nav button:focus-visible {
   outline-offset: -2px;
 }
 
-nav .logout-button {
+nav .nav-logout {
   color: #ff6b6b;
 }
 
-nav .logout-button:hover {
+nav .nav-logout:hover {
   background-color: rgba(255, 107, 107, 0.1);
 }

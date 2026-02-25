@@ -38,16 +38,21 @@ export const logoutUser = async () => {
 }
 
 export const checkAuthorized = async () => {
-    const token: string | null = localStorage.getItem("authToken");
-    if (!token) {
+    const authRequest = CreateAuthRequest({ method: "GET" });
+    if (!authRequest) {
         return false;
     }
-
-    const response = await fetch("api/auth/verify", {
-        method: "GET",
-        headers: {
-            "Authorization": `Bearer ${token}`
-        }
-    });
+    const response = await fetch("api/auth/verify", authRequest);
     return response.ok;
+}
+
+export const CreateAuthRequest = (init: RequestInit = {}): RequestInit | null => {
+    const token: string | null = localStorage.getItem("authToken");
+    if (!token) {
+        return null;
+    }
+    init.headers = {
+        "Authorization": `Bearer ${token}`
+    }
+    return init;
 }

@@ -1,4 +1,4 @@
-import { Route, Routes, useNavigate } from 'react-router'
+import { Route, Routes } from 'react-router'
 import './App.css'
 import { LoginPage } from './pages/LoginPage'
 import { RegisterPage } from './pages/RegisterPage'
@@ -6,39 +6,39 @@ import { HomePage } from './pages/HomePage'
 import { StorePage } from './pages/StorePage'
 import { GroceryPage } from './pages/GroceryPage'
 import { ProtectedRoute } from './utils/ProtectedRoute'
-import Navbar from './components/Navbar';
+import Navbar, { type NavBarLink } from './components/Navbar';
+import { NotFoundPage } from './pages/NotFoundPage'
+import { decodeRole } from './utils/jwtDecoder'
+import { AdminPage } from './pages/AdminPage'
 import { logoutUser } from './api/auth'
 
 const App: React.FC = () => {
-  const navLinks = [
+  const links: NavBarLink[] = [
     { text: 'Home', url: '/' },
     { text: 'Store', url: '/store' },
     { text: 'Grocery', url: '/grocery' },
-    // { text: 'Log out', url: '/login'}
+    { text: 'Logout', url: '/login', onClickAction: () => logoutUser() }
   ];
 
-  const navigator = useNavigate();
-  const handleLogout = () => {
-    logoutUser();           // clear tokens/session/etc
-    navigator('/login');     // send the user to login
-    console.log('Logged out');
-  };
-
+  if (decodeRole() == "Admin") {
+    links.push({ text: 'Admin', url: '/admin' });
+  }
 
   return (
     <div>
-        <Routes>
-          <Route element={<ProtectedRoute />}>
-            <Route element={ <Navbar links={navLinks} onLogout={handleLogout} />}>
-              <Route path='/' element={<HomePage />} />
-              <Route path='/store' element={<StorePage />} />
-              <Route path='/grocery' element={<GroceryPage />} />
-            </Route>
+      <Routes>
+        <Route element={<ProtectedRoute />}>
+          <Route element={<Navbar links={links} />}>
+            <Route path='/' element={<HomePage />} />
+            <Route path='/store' element={<StorePage />} />
+            <Route path='/grocery' element={<GroceryPage />} />
+            <Route path='/admin' element={<AdminPage />} />
           </Route>
-          
-           <Route path='/login' element={<LoginPage />} />
-          <Route path='/register' element={<RegisterPage />} />
-        </Routes>
+        </Route>
+        <Route path='/login' element={<LoginPage />} />
+        <Route path='/register' element={<RegisterPage />} />
+        <Route path='/*' element={<NotFoundPage />} />
+      </Routes>
     </div>
   );
 };

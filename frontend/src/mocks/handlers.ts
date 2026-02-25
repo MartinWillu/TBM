@@ -18,7 +18,7 @@ export const handlers = [
     }),
 
     http.post('api/auth/login', async () => {
-        return new HttpResponse("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.fake-token", { status: 200 });
+        return new HttpResponse("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5IiwibmFtZSI6ImplZmY1OCIsImp0aSI6IjRjZjRhOTE2LWY3YzQtNDE4MC1hYWY3LWI1MzMyYTkwNWFkZCIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IlVzZXIiLCJleHAiOjE3NzE5MjMxOTMsImlzcyI6ImxvY2FsaG9zdCIsImF1ZCI6ImxvY2FsaG9zdCJ9.EnO81ImnqKLHYjGU6iE65MkxDJ9dTlA7OU8zisWikIc", { status: 200 });
     }),
 
     http.get('api/Category', () => {
