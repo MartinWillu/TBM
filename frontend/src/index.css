@@ -162,10 +162,3 @@ img {
   gap: var(--spacing-lg);
   padding: var(--spacing-md) 0;
 }
-
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 var(--spacing-md);
-  width: 100%;
-}
