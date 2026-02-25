@@ -39,14 +39,18 @@ public class AuthController(IUserService userService, JwtIssuerService jwtServic
         var user = userService.GetAllUsers().FirstOrDefault(user => user.Username == login.Username);
         if (user == null)
         {
+            Console.WriteLine("No user found with username: " + login.Username);
             return NotFound("User not found");
         }
 
         bool verified = cryptService.VerifyPassword(login.Password, user.Password);
         if (!verified)
         {
+            Console.WriteLine("Password verification failed for user: " + login.Username);
             return Unauthorized("Invalid password");
         }
+
+        Console.WriteLine("User authenticated successfully: " + user.Username);
         var token = jwtService.CreateJwt(user.Id.ToString(), user.Username, [user.Role.Name]);
         return Ok(token);
     }
