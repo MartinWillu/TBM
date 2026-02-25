@@ -4,18 +4,14 @@ import type { Grocery, Store } from "../types";
 import { fetchGroceries, fetchStores } from "../api/fetchApi";
 import { StoreCard } from "../components/StoreCard";
 import { GroceryCard } from "../components/GroceryCard";
+import { useNavigate } from "react-router";
 
 export function HomePage() {
   const [stores, setStores] = useState<Store[]>([]);
   const [loading, setLoading] = useState(true);
   const [err, setErr] = useState<string | null>(null);
-  const [selectedStore, setSelectedStore] = useState<Store | null>(null);
   const [groceriesData, setGroceriesData] = useState<Grocery[]>([]);
-
-
-  function handleStoreClick(store: Store) {
-    setSelectedStore(store);
-  }
+  const navigate = useNavigate();
 
   useEffect(() => {
     async function load() {
@@ -32,28 +28,6 @@ export function HomePage() {
     }
     load();
   }, []);
-
-  if (selectedStore) {
-    const groceriesForStore = groceriesData.filter(
-      (g) => g.storeId === selectedStore.id
-    );
-
-    return (
-      <div className="container" style={{ padding: 'var(--spacing-md)' }}>
-        <button onClick={() => setSelectedStore(null)} style={{ marginBottom: "1rem" }}>← Back to stores</button>
-        <h1>{selectedStore.name} - Groceries</h1>
-
-        {groceriesForStore.length === 0 && <p className="text-center">No groceries found.</p>}
-
-        <div className="card-grid">
-          {groceriesForStore.map((g) => (
-            <GroceryCard key={g.id} grocery={g} />
-          ))}
-        </div>
-      </div>
-    );
-  }
-
 
   return (
     <>
@@ -75,7 +49,11 @@ export function HomePage() {
                 <h2 className="home-section-title">Stores</h2>
                 <div className="card-grid">
                   {stores.map((s) => (
-                    <StoreCard key={s.id} store={s} onClick={() => handleStoreClick(s)} />
+                    <StoreCard
+                      key={s.id}
+                      store={s}
+                      onClick={() => navigate(`/store?storeId=${s.id}`)}
+                    />
                   ))}
                 </div>
               </div>
@@ -85,7 +63,11 @@ export function HomePage() {
                 {groceriesData.length === 0 && <p className="text-center">No groceries yet.</p>}
                 <div className="card-grid">
                   {groceriesData.map((g) => (
-                    <GroceryCard key={g.id} grocery={g} />
+                    <GroceryCard
+                      key={g.id}
+                      grocery={g}
+                      onClick={() => navigate(`/grocery?groceryName=${encodeURIComponent(g.name)}`)}
+                    />
                   ))}
                 </div>
               </div>

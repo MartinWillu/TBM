@@ -4,19 +4,20 @@ using TheForbiddenFridge.DTOs;
 using TheForbiddenFridge.Models;
 using TheForbiddenFridge.Repositories;
 using TheForbiddenFridge.Service;
+using TheForbiddenFridge.Services;
 
 namespace TheForbiddenFridge.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class AuthController(IUserRepository userRepository, JwtIssuerService jwtService, CryptService cryptService)
+public class AuthController(IUserService userService, JwtIssuerService jwtService, CryptService cryptService)
     : ControllerBase
 {
     [AllowAnonymous]
     [HttpPost("register")]
     public IActionResult Register([FromBody] LoginDTO register)
     {
-        if (userRepository.GetAll().Any(user => user.Username == register.Username))
+        if (userService.GetAllUsers().Any(user => user.Username == register.Username))
         {
             return Unauthorized("Username already exists");
         }
@@ -27,7 +28,7 @@ public class AuthController(IUserRepository userRepository, JwtIssuerService jwt
         {
             Role = new Role { Name = "User" }
         };
-        userRepository.Create(user);
+        userService.CreateUser(user);
         return Ok("created user with username: " + register.Username);
     }
 
@@ -35,7 +36,7 @@ public class AuthController(IUserRepository userRepository, JwtIssuerService jwt
     [HttpPost("login")]
     public IActionResult Login([FromBody] LoginDTO login)
     {
-        var user = userRepository.GetAll().FirstOrDefault(user => user.Username == login.Username);
+        var user = userService.GetAllUsers().FirstOrDefault(user => user.Username == login.Username);
         if (user == null)
         {
             return NotFound("User not found");

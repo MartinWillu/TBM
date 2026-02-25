@@ -1,4 +1,5 @@
 import { useMemo, useState, useEffect } from "react";
+import { useSearchParams, useNavigate } from "react-router";
 import { StoreCard } from "../components/StoreCard";
 import { SearchBar } from "../components/SearchBar";
 import { fetchStores, fetchGroceries } from "../api/fetchApi";
@@ -10,10 +11,19 @@ import type { Store, Grocery } from "../types";
 import { Roles } from "../types";
 
 export function StorePage() {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const navigate = useNavigate();
   const [query, setQuery] = useState("");
   const [storesData, setStoresData] = useState<Store[]>([]);
   const [groceriesData, setGroceriesData] = useState<Grocery[]>([]);
-  const [selectedStore, setSelectedStore] = useState<Store | null>(null);
+
+  const selectedStoreIdStr = searchParams.get("storeId");
+  const selectedStore = useMemo(() => {
+    if (!selectedStoreIdStr) {
+      return null;
+    }
+    return storesData.find(s => s.id === Number(selectedStoreIdStr)) || null;
+  }, [storesData, selectedStoreIdStr]);
 
   const role = decodeRole();
   const canManage = role === Roles.Admin || role === Roles.StoreOwner;
@@ -35,7 +45,7 @@ export function StorePage() {
   }, [storesData, query]);
 
   function handleStoreClick(store: Store) {
-    setSelectedStore(store);
+    setSearchParams({ storeId: store.id.toString() });
   }
 
   function normalizeGrocery(grocery: Grocery) {
@@ -51,7 +61,7 @@ export function StorePage() {
 
     return (
       <div className="container">
-        <button onClick={() => setSelectedStore(null)} style={{ marginBottom: "1rem" }}>← Back to stores</button>
+        <button onClick={() => setSearchParams({})} style={{ marginBottom: "1rem" }}>← Back to stores</button>
         <h1>{selectedStore.name} - Groceries</h1>
 
         {canManage && (
@@ -69,7 +79,11 @@ export function StorePage() {
 
         <div className="card-grid">
           {groceriesForStore.map((g) => (
-            <GroceryCard key={g.id} grocery={g} />
+            <GroceryCard
+              key={g.id}
+              grocery={g}
+              onClick={() => navigate(`/grocery?groceryName=${encodeURIComponent(g.name)}`)}
+            />
           ))}
         </div>
       </div>
@@ -97,7 +111,7 @@ export function StorePage() {
       </div>
 
       <div className="card-grid">
-        {filtered.map((store) => (
+        {filtered.map((store: Store) => (
           <StoreCard key={store.id} store={store} onClick={handleStoreClick} />
         ))}
       </div>
