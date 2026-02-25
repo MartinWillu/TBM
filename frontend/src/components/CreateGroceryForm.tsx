@@ -99,7 +99,7 @@ export function CreateGroceryForm({ storeId, onGroceryCreated }: CreateGroceryFo
             {fields.map((field) => (
                 <input
                     key={field.name}
-                    className="auth-input"
+                    className="form-input"
                     name={field.name}
                     type={field.type}
                     placeholder={field.placeholder}

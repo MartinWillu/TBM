@@ -1,6 +1,6 @@
 import { useState } from "react";
 import type { UserInfo } from "../types";
-import "./Styles/Auth.css";
+import "./Styles/Form.css";
 
 interface AuthFormProps {
     onError(message: string): void;
@@ -36,18 +36,18 @@ export function AuthForm({ onError, onSuccess, submitLabel = "Submit", children,
     }
 
     return (
-        <form onSubmit={handleSubmit} className="auth-container">
-            <h2 className="auth-title">{submitLabel}</h2>
-            <div className="auth-input-group">
+        <form onSubmit={handleSubmit} className="form-container">
+            <h2 className="form-title">{submitLabel}</h2>
+            <div className="form-input-group">
                 <input
-                    className="auth-input"
+                    className="form-input"
                     type="text"
                     placeholder="Username"
                     value={username}
                     onChange={(event) => setUsername(event.target.value.trim())}
                 />
                 <input
-                    className="auth-input"
+                    className="form-input"
                     type="password"
                     placeholder="Password"
                     value={password}
@@ -55,7 +55,7 @@ export function AuthForm({ onError, onSuccess, submitLabel = "Submit", children,
                 />
             </div>
 
-            <button type="submit" className="auth-button">{submitLabel}</button>
+            <button type="submit" className="form-button">{submitLabel}</button>
 
             {children && (
                 <div style={{ marginTop: '16px', width: '100%', textAlign: 'center' }}>

@@ -32,7 +32,7 @@ const RegisterPage: React.FC = () => {
                         <span style={{ opacity: 0.7, marginRight: '8px' }}>Already have an account?</span>
                         <button
                             type="button"
-                            className="auth-link"
+                            className="form-link"
                             style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, fontSize: 'inherit' }}
                             onClick={() => navigator("/login")}
                         >
@@ -40,7 +40,7 @@ const RegisterPage: React.FC = () => {
                         </button>
                     </div>
                 </AuthForm>
-                <p className={`auth-error-message ${error ? 'visible' : ''}`}>{error}</p>
+                <p className={`form-error-message ${error ? 'visible' : ''}`}>{error}</p>
             </div>
         </div>
     )

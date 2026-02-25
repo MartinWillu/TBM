@@ -1,4 +1,4 @@
-.auth-container {
+.form-container {
     display: flex;
     flex-direction: column;
     width: 100%;
@@ -14,7 +14,7 @@
 }
 
 /* Error message styling that doesn't shift layout */
-.auth-error-message {
+.form-error-message {
     position: absolute;
     bottom: -40px;
     /* Position below the card */
@@ -30,13 +30,13 @@
     pointer-events: none;
 }
 
-.auth-error-message.visible {
+.form-error-message.visible {
     opacity: 1;
     transform: translateY(0);
 }
 
 
-.auth-title {
+.form-title {
     margin-bottom: var(--spacing-lg);
     font-size: 1.75rem;
     font-weight: 600;
@@ -44,26 +44,26 @@
     text-align: center;
 }
 
-.auth-form {
+.form-wrapper {
     display: flex;
     flex-direction: column;
     width: 100%;
     gap: var(--spacing-md);
 }
 
-.auth-input-group {
+.form-input-group {
     display: flex;
     flex-direction: column;
     gap: var(--spacing-md);
     width: 100%;
 }
 
-.auth-label {
+.form-label {
     font-size: 0.9rem;
     font-weight: 500;
 }
 
-.auth-input {
+.form-input {
     width: 100%;
     padding: 12px 14px;
     font-size: 1rem;
@@ -74,13 +74,13 @@
     transition: all 0.2s ease-in-out;
 }
 
-.auth-input:focus {
+.form-input:focus {
     outline: none;
     border-color: var(--primary-color);
     box-shadow: 0 0 0 2px rgba(124, 77, 255, 0.2);
 }
 
-.auth-button {
+.form-button {
     width: 100%;
     margin-top: var(--spacing-lg);
     padding: 14px;
@@ -95,31 +95,31 @@
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
 }
 
-.auth-button:hover {
+.form-button:hover {
     background-color: var(--primary-hover);
     transform: translateY(-1px);
     box-shadow: 0 6px 8px rgba(0, 0, 0, 0.3);
 }
 
-.auth-button:active {
+.form-button:active {
     transform: translateY(0);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-.auth-button.secondary {
+.form-button.secondary {
     background-color: transparent;
     border: 1px solid var(--border-color);
     color: var(--text-color);
     box-shadow: none;
 }
 
-.auth-button.secondary:hover {
+.form-button.secondary:hover {
     background-color: rgba(255, 255, 255, 0.05);
     border-color: var(--text-color);
     transform: translateY(-1px);
 }
 
-.auth-link {
+.form-link {
     display: inline-block;
     margin-top: var(--spacing-md);
     font-size: 0.95rem;
@@ -129,27 +129,7 @@
     transition: color 0.2s;
 }
 
-.auth-link:hover {
+.form-link:hover {
     color: var(--primary-hover);
     text-decoration: underline;
-}
-
-.auth-error-message {
-    position: absolute;
-    bottom: -40px;
-    left: 0;
-    width: 100%;
-    text-align: center;
-    color: var(--error-color);
-    font-size: 0.9rem;
-    min-height: 20px;
-    opacity: 0;
-    transform: translateY(-10px);
-    transition: opacity 0.3s ease, transform 0.3s ease;
-    pointer-events: none;
-}
-
-.auth-error-message.visible {
-    opacity: 1;
-    transform: translateY(0);
 }
