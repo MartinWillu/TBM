@@ -21,7 +21,7 @@ public class StoreService(
         return _storeRepository.GetById(id);
     }
 
-    public Store CreateStore(StoreDTO storeDto)
+    public Store CreateStore(Store storeDto)
     {
         var store = new Store
         {
@@ -42,7 +42,7 @@ public class StoreService(
         }
 
         existingStore.Name = storeDto.Name;
-        existingStore.LogoUrl = storeDto.LogoUrl;
+        existingStore.LogoUrl = storeDto.LogoUrl ?? string.Empty;
 
         _storeRepository.Update(existingStore);
         return existingStore;
