@@ -1,17 +1,19 @@
 import { useEffect, useState, useMemo } from "react";
 import type { Grocery, Store } from "../types";
 import { fetchGroceries, fetchStores } from "../api/fetchApi";
-import { useNavigate } from "react-router";
+import { useNavigate, useSearchParams } from "react-router";
 import { GroceryCard } from "../components/GroceryCard";
 import { StoreCard } from "../components/StoreCard";
 
 export function GroceryPage() {
+  const [searchParams, setSearchParams] = useSearchParams();
   const [groceries, setGroceries] = useState<Grocery[]>([]);
   const [stores, setStores] = useState<Store[]>([]);
   const [loading, setLoading] = useState(true);
   const [err, setErr] = useState<string | null>(null);
-  const [selectedGroceryName, setSelectedGroceryName] = useState<string | null>(null);
   const navigate = useNavigate();
+
+  const selectedGroceryName = searchParams.get("groceryName");
 
   useEffect(() => {
     async function load() {
@@ -41,15 +43,28 @@ export function GroceryPage() {
     return Array.from(map.values());
   }, [groceries]);
 
-  if (selectedGroceryName) {
-    const groceryNameLower = selectedGroceryName.toLowerCase();
-    const matchingGroceries = groceries.filter(g => g.name.toLowerCase() === groceryNameLower);
-    const storeIds = new Set(matchingGroceries.map(g => g.storeId));
-    const storesWithGrocery = stores.filter(s => storeIds.has(s.id));
+  const matchingGroceries = useMemo(() => {
+    if (!selectedGroceryName) {
+      return [];
 
+    }
+    const lower = selectedGroceryName.toLowerCase();
+    return groceries.filter(g => g.name.toLowerCase() === lower);
+  }, [groceries, selectedGroceryName]);
+
+  const storesWithGrocery = useMemo(() => {
+    if (matchingGroceries.length === 0) {
+      return [];
+    }
+    const storeIds = new Set(matchingGroceries.map(g => g.storeId));
+    return stores.filter(s => storeIds.has(s.id));
+  }, [stores, matchingGroceries]);
+
+
+  if (selectedGroceryName) {
     return (
       <div className="container">
-        <button onClick={() => setSelectedGroceryName(null)} style={{ marginBottom: "1rem" }}>← Back to groceries</button>
+        <button onClick={() => setSearchParams({})} style={{ marginBottom: "1rem" }}>← Back to groceries</button>
         <h1>Stores with "{selectedGroceryName}"</h1>
 
         {storesWithGrocery.length === 0 && <p className="text-center">No stores found.</p>}
@@ -66,6 +81,7 @@ export function GroceryPage() {
       </div>
     );
   }
+
 
   return (
     <>
@@ -84,7 +100,7 @@ export function GroceryPage() {
                 <GroceryCard
                   key={g.id}
                   grocery={g}
-                  onClick={() => setSelectedGroceryName(g.name)}
+                  onClick={() => setSearchParams({ groceryName: g.name })}
                 />
               ))}
             </div>
