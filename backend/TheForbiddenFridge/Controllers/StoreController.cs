@@ -39,11 +39,17 @@ public class StoreController(IStoreRepository storeRepository) : ControllerBase
             return BadRequest(ModelState);
         }
 
+        var userIdClaim = User.FindFirstValue(JwtRegisteredClaimNames.Sub);
+        if (string.IsNullOrEmpty(userIdClaim))
+        {
+            return Unauthorized("User ID claim is missing or invalid.");
+        }
+
         var store = new Store
         {
             Name = storeDto.Name,
             LogoUrl = storeDto.LogoUrl ?? string.Empty,
-            UserId = int.Parse(User.FindFirstValue(JwtRegisteredClaimNames.Sub)!)
+            UserId = int.Parse(userIdClaim)
         };
 
         storeRepository.Create(store);
