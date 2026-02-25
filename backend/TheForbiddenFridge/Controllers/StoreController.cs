@@ -5,23 +5,24 @@ using Microsoft.AspNetCore.Mvc;
 using TheForbiddenFridge.DTOs;
 using TheForbiddenFridge.Models;
 using TheForbiddenFridge.Repositories;
+using TheForbiddenFridge.Services;
 
 namespace TheForbiddenFridge.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class StoreController(IStoreRepository storeRepository) : ControllerBase
+public class StoreController(IStoreService storeService) : ControllerBase
 {
     [HttpGet]
     public IActionResult Get()
     {
-        return Ok(storeRepository.GetAll());
+        return Ok(storeService.GetAllStores());
     }
 
     [HttpGet("{id}")]
     public IActionResult GetById(int id)
     {
-        var store = storeRepository.GetById(id);
+        var store = storeService.GetStoreById(id);
         if (store == null)
         {
             return NotFound("Store not found");
@@ -45,7 +46,7 @@ public class StoreController(IStoreRepository storeRepository) : ControllerBase
             UserId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!),
         };
 
-        storeRepository.Create(store);
+        storeService.CreateStore(store);
         return CreatedAtAction(nameof(GetById), new { id = store.Id }, store);
     }
 
@@ -58,7 +59,7 @@ public class StoreController(IStoreRepository storeRepository) : ControllerBase
             return BadRequest(ModelState);
         }
 
-        var existingStore = storeRepository.GetById(id);
+        var existingStore = storeService.GetStoreById(id);
         if (existingStore == null)
         {
             return NotFound("Store not found");
@@ -72,7 +73,7 @@ public class StoreController(IStoreRepository storeRepository) : ControllerBase
 
         existingStore.Name = storeDto.Name;
         existingStore.LogoUrl = storeDto.LogoUrl ?? string.Empty;
-        storeRepository.Update(existingStore);
+        storeService.UpdateStore(id, storeDto);
 
         return Ok(existingStore);
     }
@@ -81,7 +82,7 @@ public class StoreController(IStoreRepository storeRepository) : ControllerBase
     [HttpDelete("{id}")]
     public IActionResult Delete(int id)
     {
-        var existingStore = storeRepository.GetById(id);
+        var existingStore = storeService.GetStoreById(id);
         if (existingStore == null)
         {
             return NotFound("Store not found");
@@ -93,7 +94,7 @@ public class StoreController(IStoreRepository storeRepository) : ControllerBase
             return authResult;
         }
 
-        storeRepository.Delete(existingStore);
+        storeService.DeleteStore(id);
         return NoContent();
     }
 

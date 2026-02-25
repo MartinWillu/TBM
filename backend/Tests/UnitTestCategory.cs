@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using TheForbiddenFridge.Controllers;
 using TheForbiddenFridge.Repositories;
+using TheForbiddenFridge.Services;
 
 public class UnitTestCategory
 {
@@ -10,7 +11,7 @@ public class UnitTestCategory
     [Test]
     public async Task CreateCategoryWithInvalidData()
     {
-        var categorySub = Substitute.For<ICategoryRepository>();
+        var categorySub = Substitute.For<ICategoryService>();
         var categoryController = new CategoryController(categorySub);
         var categoryDTO = new CategoryDTO { Name = "" };
         var result = categoryController.Create(categoryDTO);
@@ -21,7 +22,7 @@ public class UnitTestCategory
     [Test]
     public async Task CreateCategory()
     {
-        var categorySub = Substitute.For<ICategoryRepository>();
+        var categorySub = Substitute.For<ICategoryService>();
         var categoryController = new CategoryController(categorySub);
         var categoryDTO = new CategoryDTO { Name = "Test Category" };
         var result = categoryController.Create(categoryDTO);
@@ -32,8 +33,8 @@ public class UnitTestCategory
     [Test]
     public async Task GetCategoryById()
     {
-        var categorySub = Substitute.For<ICategoryRepository>();
-        categorySub.GetById(1).Returns(new TheForbiddenFridge.Models.Category
+        var categorySub = Substitute.For<ICategoryService>();
+        categorySub.GetCategoryById(1).Returns(new TheForbiddenFridge.Models.Category
         {
             Id = 1,
             Name = "Test Category"
@@ -49,9 +50,9 @@ public class UnitTestCategory
     [Test]
     public async Task DeleteCategory()
     {
-        var categorySub = Substitute.For<ICategoryRepository>();
+        var categorySub = Substitute.For<ICategoryService>();
         var categoryController = new CategoryController(categorySub);
-        categorySub.GetById(1).Returns(new TheForbiddenFridge.Models.Category
+        categorySub.GetCategoryById(1).Returns(new TheForbiddenFridge.Models.Category
         {
             Id = 1,
             Name = "Test Category"

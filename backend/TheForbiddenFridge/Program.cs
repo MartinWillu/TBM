@@ -55,6 +55,10 @@ builder.Services.AddScoped<JwtIssuerService>();
 builder.Services.AddScoped<CryptService>();
 builder.Services.AddScoped<DatabaseSeeder>();
 builder.Services.AddScoped<IGroceryService, GroceryService>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IRoleService, RoleService>();
+builder.Services.AddScoped<IStoreService, StoreService>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();

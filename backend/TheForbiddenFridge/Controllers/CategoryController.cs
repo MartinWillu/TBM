@@ -2,18 +2,19 @@
 using Microsoft.AspNetCore.Mvc;
 using TheForbiddenFridge.Models;
 using TheForbiddenFridge.Repositories;
+using TheForbiddenFridge.Services;
 
 namespace TheForbiddenFridge.Controllers;
 
 
 [ApiController]
 [Route("api/[controller]")]
-public class CategoryController(ICategoryRepository categoryRepository) : ControllerBase
+public class CategoryController(ICategoryService categoryService) : ControllerBase
 {
     [HttpGet]
     public IActionResult Get()
     {
-        var categories = categoryRepository.GetAll();
+        var categories = categoryService.GetAllCategories();
         return Ok(categories);
     }
 
@@ -21,7 +22,7 @@ public class CategoryController(ICategoryRepository categoryRepository) : Contro
     [HttpGet("{id}")]
     public IActionResult GetById(int id)
     {
-        var category = categoryRepository.GetById(id);
+        var category = categoryService.GetCategoryById(id);
         if (category == null)
         {
             return NotFound("Category not found");
@@ -40,7 +41,7 @@ public class CategoryController(ICategoryRepository categoryRepository) : Contro
             return BadRequest("Category name is required");
         }
         var newCategory = new Category() { Name = category.Name };
-        categoryRepository.Create(newCategory);
+        categoryService.CreateCategory(newCategory);
         return Ok("Category created");
     }
 
@@ -48,14 +49,14 @@ public class CategoryController(ICategoryRepository categoryRepository) : Contro
     [HttpPut("{id}")]
     public IActionResult Update(int id, [FromBody] CategoryDTO category)
     {
-        var existingCategory = categoryRepository.GetById(id);
+        var existingCategory = categoryService.GetCategoryById(id);
         if (existingCategory == null)
         {
             return NotFound("Category not found");
         }
 
         existingCategory.Name = category.Name;
-        categoryRepository.Update(existingCategory);
+        categoryService.UpdateCategory(id, existingCategory);
         return Ok("Category updated");
     }
 
@@ -63,13 +64,13 @@ public class CategoryController(ICategoryRepository categoryRepository) : Contro
     [HttpDelete("{id}")]
     public IActionResult Delete(int id)
     {
-        var existingCategory = categoryRepository.GetById(id);
+        var existingCategory = categoryService.GetCategoryById(id);
         if (existingCategory == null)
         {
             return NotFound("Category not found");
         }
 
-        categoryRepository.Delete(existingCategory);
+        categoryService.DeleteCategory(id);
         return Ok("Category deleted");
     }
 }
