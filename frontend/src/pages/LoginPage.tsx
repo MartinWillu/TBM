@@ -4,7 +4,7 @@ import { loginUser } from "../api/auth"
 import type { UserInfo } from "../types"
 import { AuthForm } from "../components/AuthForm"
 
-const LoginPage: React.FC = () => {
+export function LoginPage() {
     const navigator = useNavigate()
     const [error, setError] = useState("");
 
@@ -52,5 +52,3 @@ const LoginPage: React.FC = () => {
         </div>
     )
 }
-
-export { LoginPage };

@@ -4,7 +4,7 @@ import type { UserInfo } from "../types";
 import { registerUser } from "../api/auth";
 import { useNavigate } from "react-router";
 
-const RegisterPage: React.FC = () => {
+export function RegisterPage() {
     const [error, setError] = useState("");
     const navigator = useNavigate();
 
@@ -45,5 +45,3 @@ const RegisterPage: React.FC = () => {
         </div>
     )
 }
-
-export { RegisterPage };
