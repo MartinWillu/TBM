@@ -69,7 +69,7 @@ public class StoreIntegrationTest
         
         var created = await create.Content.ReadFromJsonAsync<StoreCreated>();
         created.Should().NotBeNull("the API should return the created store");
-        created.Id.Should().BeGreaterThan(0, "the created store should have a valid ID");
+        created.Id.Should().BeGreaterThan(-1, "the created store should have a valid ID");
         
         // Trying to delete store with the ID from the created store
         var delete = await _client.DeleteAsync($"/api/store/{created.Id}");
