@@ -9,5 +9,5 @@ public interface IUserService
     User CreateUser(User user);
     User UpdateUser(int id, User user);
     void DeleteUser(int id);
-    List<UserInfoDTO> GetUserDTOById(int id);
+    List<UserInfoDTO> GetUserDTOInfo();
 }
