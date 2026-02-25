@@ -10,7 +10,7 @@ type Props = {
 
 export function GroceryCard({ grocery, onClick, className }: Props) {
   const sale = isOnSale(grocery);
-  const hasImage = Boolean(grocery.logoUrl);
+  const hasImage = Boolean(grocery.imageUrl);
 
   const currentPriceLabel = formatCurrency(grocery.currentPrice, "NOK", "nb-NO");
   const oldPriceLabel =
@@ -36,7 +36,7 @@ export function GroceryCard({ grocery, onClick, className }: Props) {
       {hasImage && (
         <img
           className="card-image"
-          src={grocery.logoUrl!}
+          src={grocery.imageUrl!}
           alt={`${grocery.name} logo`}
           onError={(e) => ((e.currentTarget as HTMLImageElement).style.display = "none")}
         />
