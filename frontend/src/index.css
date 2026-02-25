@@ -33,8 +33,6 @@
   line-height: 1.5;
   font-weight: 400;
 
-  color-scheme: dark;
-  /* Force dark mode preference for OS */
   color: var(--text-color);
   background-color: var(--bg-color);
 
@@ -47,7 +45,26 @@
   scrollbar-gutter: stable;
 }
 
-*, *::before, *::after {
+[data-theme="light"] {
+  --primary-color: #6200ea;
+  --primary-hover: #3700b3;
+  --secondary-color: #00c853;
+  --secondary-hover: #009624;
+  --error-color: #d32f2f;
+
+  --bg-color: #f5f5f5;
+  --text-color: rgba(0, 0, 0, 0.87);
+
+  --input-bg: #ffffff;
+  --card-bg: #ffffff;
+  --border-color: #e0e0e0;
+
+  --image-bg: transparent;
+}
+
+*,
+*::before,
+*::after {
   box-sizing: border-box;
 }
 

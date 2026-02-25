@@ -11,6 +11,7 @@ import { NotFoundPage } from './pages/NotFoundPage'
 import { decodeRole } from './utils/jwtDecoder'
 import { AdminPage } from './pages/AdminPage'
 import { logoutUser } from './api/auth'
+import { ThemeToggle } from './components/ThemeToggle'
 
 const App: React.FC = () => {
   const links: NavBarLink[] = [
@@ -26,6 +27,7 @@ const App: React.FC = () => {
 
   return (
     <div>
+      <ThemeToggle />
       <Routes>
         <Route element={<ProtectedRoute />}>
           <Route element={<Navbar links={links} />}>

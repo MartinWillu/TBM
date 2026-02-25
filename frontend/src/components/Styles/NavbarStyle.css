@@ -71,6 +71,5 @@
 }
 
 .nav-logout:hover {
-  background-color: var(--error-bg);
-  color: var(--error-color);
+  background-color: var(--error-color);
 }
