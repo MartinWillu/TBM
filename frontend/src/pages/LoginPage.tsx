@@ -13,8 +13,7 @@ const LoginPage: React.FC = () => {
         loginUser(userInfo).then(() => {
             navigator("/");
         }).catch(() => {
-            setError("Invalid credentials");
-            setTimeout(() => setError(""), 3000);
+            handleOnError("Invalid credentials");
         })
     }
 
