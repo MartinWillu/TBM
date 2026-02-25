@@ -44,11 +44,13 @@ public class DatabaseSeeder
         await _context.SaveChangesAsync();
 
         // Seed Users
+        var adminPassword = _configuration["AdminPassword"] ?? "admin123";
+
         var users = new List<User>
         {
             new() {
                 Username = "admin",
-                Password = _cryptService.HashPassword("admin123"),
+                Password = _cryptService.HashPassword(adminPassword),
                 RoleId = roles[0].Id
             },
             new() {
@@ -88,22 +90,22 @@ public class DatabaseSeeder
         {
             new() {
                 Name = "Fresh Market",
-                LogoUrl = "https://example.com/logos/fresh-market.png",
+                LogoUrl = "https://placehold.co/200x200/4CAF50/ffffff?text=Fresh+Market",
                 UserId = users[2].Id
             },
             new() {
                 Name = "Green Grocers",
-                LogoUrl = "https://example.com/logos/green-grocers.png",
+                LogoUrl = "https://placehold.co/200x200/8BC34A/ffffff?text=Green+Grocers",
                 UserId = users[2].Id
             },
             new() {
                 Name = "Super Saver",
-                LogoUrl = "https://example.com/logos/super-saver.png",
+                LogoUrl = "https://placehold.co/200x200/FF5722/ffffff?text=Super+Saver",
                 UserId = users[3].Id
             },
             new() {
                 Name = "Organic Corner",
-                LogoUrl = "https://example.com/logos/organic-corner.png",
+                LogoUrl = "https://placehold.co/200x200/009688/ffffff?text=Organic+Corner",
                 UserId = users[3].Id
             }
         };
@@ -117,7 +119,7 @@ public class DatabaseSeeder
                 CurrentPrice = 3.99f,
                 OldPrice = 4.99f,
                 Quantity = 100,
-                ImageUrl = "https://example.com/images/apples.jpg",
+                ImageUrl = "https://placehold.co/600x400/FF5252/ffffff?text=Organic+Apples",
                 StoreId = stores[0].Id,
                 CategoryId = categories[0].Id
             },
@@ -126,7 +128,7 @@ public class DatabaseSeeder
                 CurrentPrice = 1.99f,
                 OldPrice = 2.49f,
                 Quantity = 150,
-                ImageUrl = "https://example.com/images/bananas.jpg",
+                ImageUrl = "https://placehold.co/600x400/FFEB3B/000000?text=Bananas",
                 StoreId = stores[0].Id,
                 CategoryId = categories[0].Id
             },
@@ -135,7 +137,7 @@ public class DatabaseSeeder
                 CurrentPrice = 3.49f,
                 OldPrice = 3.99f,
                 Quantity = 50,
-                ImageUrl = "https://example.com/images/milk.jpg",
+                ImageUrl = "https://placehold.co/600x400/E3F2FD/000000?text=Whole+Milk",
                 StoreId = stores[0].Id,
                 CategoryId = categories[2].Id
             },
@@ -144,7 +146,7 @@ public class DatabaseSeeder
                 CurrentPrice = 5.99f,
                 OldPrice = 6.99f,
                 Quantity = 30,
-                ImageUrl = "https://example.com/images/cheese.jpg",
+                ImageUrl = "https://placehold.co/600x400/FFC107/000000?text=Cheddar+Cheese",
                 StoreId = stores[0].Id,
                 CategoryId = categories[2].Id
             },
@@ -153,7 +155,7 @@ public class DatabaseSeeder
                 CurrentPrice = 2.49f,
                 OldPrice = 2.99f,
                 Quantity = 80,
-                ImageUrl = "https://example.com/images/carrots.jpg",
+                ImageUrl = "https://placehold.co/600x400/FF9800/ffffff?text=Carrots",
                 StoreId = stores[1].Id,
                 CategoryId = categories[1].Id
             },
@@ -162,7 +164,7 @@ public class DatabaseSeeder
                 CurrentPrice = 2.99f,
                 OldPrice = 3.49f,
                 Quantity = 60,
-                ImageUrl = "https://example.com/images/broccoli.jpg",
+                ImageUrl = "https://placehold.co/600x400/4CAF50/ffffff?text=Broccoli",
                 StoreId = stores[1].Id,
                 CategoryId = categories[1].Id
             },
@@ -171,7 +173,7 @@ public class DatabaseSeeder
                 CurrentPrice = 4.99f,
                 OldPrice = 5.99f,
                 Quantity = 40,
-                ImageUrl = "https://example.com/images/strawberries.jpg",
+                ImageUrl = "https://placehold.co/600x400/E91E63/ffffff?text=Strawberries",
                 StoreId = stores[1].Id,
                 CategoryId = categories[0].Id
             },
@@ -180,7 +182,7 @@ public class DatabaseSeeder
                 CurrentPrice = 7.99f,
                 OldPrice = 9.99f,
                 Quantity = 25,
-                ImageUrl = "https://example.com/images/chicken.jpg",
+                ImageUrl = "https://placehold.co/600x400/FFCCBC/000000?text=Chicken+Breast",
                 StoreId = stores[2].Id,
                 CategoryId = categories[3].Id
             },
@@ -189,7 +191,7 @@ public class DatabaseSeeder
                 CurrentPrice = 5.99f,
                 OldPrice = 7.49f,
                 Quantity = 35,
-                ImageUrl = "https://example.com/images/beef.jpg",
+                ImageUrl = "https://placehold.co/600x400/D7CCC8/000000?text=Ground+Beef",
                 StoreId = stores[2].Id,
                 CategoryId = categories[3].Id
             },
@@ -198,7 +200,7 @@ public class DatabaseSeeder
                 CurrentPrice = 4.49f,
                 OldPrice = 5.49f,
                 Quantity = 45,
-                ImageUrl = "https://example.com/images/oj.jpg",
+                ImageUrl = "https://placehold.co/600x400/FF9800/ffffff?text=Orange+Juice",
                 StoreId = stores[2].Id,
                 CategoryId = categories[4].Id
             },
@@ -207,7 +209,7 @@ public class DatabaseSeeder
                 CurrentPrice = 3.99f,
                 OldPrice = 4.49f,
                 Quantity = 55,
-                ImageUrl = "https://example.com/images/bread.jpg",
+                ImageUrl = "https://placehold.co/600x400/8D6E63/ffffff?text=Whole+Wheat+Bread",
                 StoreId = stores[3].Id,
                 CategoryId = categories[5].Id
             },
@@ -216,7 +218,7 @@ public class DatabaseSeeder
                 CurrentPrice = 5.99f,
                 OldPrice = 6.99f,
                 Quantity = 20,
-                ImageUrl = "https://example.com/images/croissants.jpg",
+                ImageUrl = "https://placehold.co/600x400/FFECB3/000000?text=Croissants",
                 StoreId = stores[3].Id,
                 CategoryId = categories[5].Id
             },
@@ -225,7 +227,7 @@ public class DatabaseSeeder
                 CurrentPrice = 4.49f,
                 OldPrice = 5.49f,
                 Quantity = 100,
-                ImageUrl = "https://example.com/images/granola.jpg",
+                ImageUrl = "https://placehold.co/600x400/795548/ffffff?text=Granola+Bars",
                 StoreId = stores[3].Id,
                 CategoryId = categories[6].Id
             },
@@ -234,7 +236,7 @@ public class DatabaseSeeder
                 CurrentPrice = 6.99f,
                 OldPrice = 8.99f,
                 Quantity = 30,
-                ImageUrl = "https://example.com/images/pizza.jpg",
+                ImageUrl = "https://placehold.co/600x400/BF360C/ffffff?text=Frozen+Pizza",
                 StoreId = stores[2].Id,
                 CategoryId = categories[7].Id
             }
