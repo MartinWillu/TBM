@@ -6,7 +6,9 @@ public interface IUserService
 {
     IEnumerable<User> GetAllUsers();
     User? GetUserById(int id);
-    User CreateUser(User user);
+    User RegisterUser(LoginDTO registerDTO);
+    User? VerifyUser(LoginDTO loginDTO);
+    User UpdateUser(int id, UserUpdateDTO updateDTO);
     User UpdateUser(int id, User user);
     void DeleteUser(int id);
     List<UserInfoDTO> GetUserDTOInfo();

@@ -12,7 +12,7 @@ namespace TheForbiddenFridge.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class UserController(IUserService userService, IRoleService roleService, CryptService cryptService) : ControllerBase
+public class UserController(IUserService userService, IRoleService roleService) : ControllerBase
 {
     [HttpGet]
     [Authorize(Roles = "Admin")]
@@ -59,24 +59,19 @@ public class UserController(IUserService userService, IRoleService roleService, 
             return Unauthorized("Invalid user ID in token.");
         }
 
-        var user = userService.GetUserById(userId);
-        if (user == null)
+        try
         {
-            return NotFound("User not found.");
+            var user = userService.UpdateUser(userId, updatedUser);
+            return Ok(user);
         }
-
-        if (!string.IsNullOrEmpty(updatedUser.Username))
+        catch (ArgumentException ex)
         {
-            user.Username = updatedUser.Username;
+            return BadRequest(ex.Message);
         }
-
-        if (!string.IsNullOrEmpty(updatedUser.Password))
+        catch (Exception ex)
         {
-            user.Password = cryptService.HashPassword(updatedUser.Password);
+            return NotFound(ex.Message);
         }
-
-        userService.UpdateUser(userId, user);
-        return Ok(user);
     }
 
 
