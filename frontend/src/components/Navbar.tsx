@@ -1,37 +1,43 @@
 import React from 'react';
 import './Styles/NavbarStyle.css';
 import { Outlet, useNavigate } from 'react-router';
+import { Footer } from './Footer';
 
-type NavbarProps = {
-  links: { text: string; url: string }[];
-  onLogout?: () => void;
+export type NavBarLink = {
+  text: string;
+  url: string;
+  onClickAction?: () => void;
 };
 
-const Navbar: React.FC<NavbarProps> = ({ links, onLogout }) => {
-    const navigator = useNavigate();
+type NavbarProps = {
+  links: NavBarLink[];
+};
+
+const Navbar: React.FC<NavbarProps> = ({ links }) => {
+  const navigator = useNavigate();
   return (
-    <>
-      <nav>
-        <ul>
+    <div className="app-layout">
+      <nav className="navbar">
+        <ul className="navbar-list">
           {links.map((link, index) => (
-            <li key={index}>
-              <button onClick={() => navigator(link.url)}>{link.text}</button>
-              
+            <li key={index} className="navbar-item">
+              <button className={`nav-button nav-${link.text.toLowerCase()}`}
+                onClick={() => {
+                  if (link.onClickAction) {
+                    link.onClickAction();
+                  }
+                  navigator(link.url)
+                }}>
+                {link.text}</button>
             </li>
           ))}
-          
-          {onLogout && (
-            <li>
-              <button className="logout-button" onClick={onLogout}>
-                Log Out
-              </button>
-            </li>
-          )}
-
         </ul>
       </nav>
-      <Outlet />
-    </>
+      <main className="main-content">
+        <Outlet />
+      </main>
+      <Footer />
+    </div>
   );
 };
 

@@ -4,9 +4,11 @@ import { BrowserRouter } from 'react-router';
 import Navbar from '../src/components/Navbar';
 
 describe('Navbar', () => {
+    const logoutFunc = vi.fn();
     const links = [
         { text: 'Home', url: '/' },
-        { text: 'Stores', url: '/stores' }
+        { text: 'Stores', url: '/stores' },
+        { text: 'Logout', url: '/logout', onClickAction: logoutFunc }
     ];
 
     test('renders navigation links', async () => {
@@ -21,17 +23,15 @@ describe('Navbar', () => {
     });
 
     test('shows logout button when onLogout is provided', async () => {
-        const onLogout = vi.fn();
         const { getByText } = await render(
             <BrowserRouter>
-                <Navbar links={links} onLogout={onLogout} />
+                <Navbar links={links} />
             </BrowserRouter>
         );
-
-        const logoutBtn = getByText('Log Out');
+        const logoutBtn = getByText('Logout');
         await expect.element(logoutBtn).toBeInTheDocument();
 
         await logoutBtn.click();
-        expect(onLogout).toHaveBeenCalled();
+        expect(logoutFunc).toHaveBeenCalled();
     });
 });
