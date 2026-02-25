@@ -40,10 +40,9 @@ jobs:
                   sed -i "s/\${ADMIN_PASSWORD}/${ADMIN_PASSWORD}/g" ./azure.yml
 
             - name: Deploy to Azure Container Instances
-              uses: azure/aci-deploy@v1
+              uses: azure/CLI@v2
               with:
-                  resource-group: ${{ secrets.AZURE_RESOURCE_GROUP }}
-                  dns-name-label: ${{ secrets.AZURE_DNS_LABEL }}
-                  name: tbm-container-group
-                  location: norwayeast
-                  configuration-file: ./azure.yml
+                  inlineScript: |
+                      az container create \
+                        --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} \
+                        --file ./azure.yml
