@@ -18,7 +18,8 @@ export const handlers = [
     }),
 
     http.post('api/auth/login', async () => {
-        return new HttpResponse("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5IiwibmFtZSI6ImplZmY1OCIsImp0aSI6IjRjZjRhOTE2LWY3YzQtNDE4MC1hYWY3LWI1MzMyYTkwNWFkZCIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IlVzZXIiLCJleHAiOjE3NzE5MjMxOTMsImlzcyI6ImxvY2FsaG9zdCIsImF1ZCI6ImxvY2FsaG9zdCJ9.EnO81ImnqKLHYjGU6iE65MkxDJ9dTlA7OU8zisWikIc", { status: 200 });
+        // Return token with Admin role
+        return new HttpResponse("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwibmFtZSI6ImFkbWluIiwianRpIjoiYjUxZjg2NjEtZmFkYS00NmU5LTlmZjItNDU5ZTEyOWJkZDc0IiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiQWRtaW4iLCJleHAiOjE3NzIwMTE0MzQsImlzcyI6ImxvY2FsaG9zdCIsImF1ZCI6ImxvY2FsaG9zdCJ9.BD9v5GriOAuN5NcQ6cp8mSF673wILLy7aBMYs1Wd8tw", { status: 200 });
     }),
 
     http.get('api/Category', () => {
