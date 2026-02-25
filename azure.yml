@@ -35,6 +35,8 @@ properties:
             value: localhost
           - name: Jwt__Secret
             secureValue: ${JWT_SECRET}
+          - name: AdminPassword
+            secureValue: ${ADMIN_PASSWORD}
           - name: ASPNETCORE_URLS
             value: http://+:5200
         resources:
