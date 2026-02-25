@@ -18,7 +18,8 @@ export const handlers = [
     }),
 
     http.post('api/auth/login', async () => {
-        return new HttpResponse("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.fake-token", { status: 200 });
+        // Return token with Admin role
+        return new HttpResponse("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwibmFtZSI6ImFkbWluIiwianRpIjoiYjUxZjg2NjEtZmFkYS00NmU5LTlmZjItNDU5ZTEyOWJkZDc0IiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiQWRtaW4iLCJleHAiOjE3NzIwMTE0MzQsImlzcyI6ImxvY2FsaG9zdCIsImF1ZCI6ImxvY2FsaG9zdCJ9.BD9v5GriOAuN5NcQ6cp8mSF673wILLy7aBMYs1Wd8tw", { status: 200 });
     }),
 
     http.get('api/Category', () => {

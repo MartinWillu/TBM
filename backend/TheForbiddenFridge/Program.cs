@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using TheForbiddenFridge.Configurations;
 using TheForbiddenFridge.DbContexts;
+using TheForbiddenFridge.Middleware;
 using TheForbiddenFridge.Repositories;
 using TheForbiddenFridge.Service;
 using TheForbiddenFridge.Services;
@@ -68,6 +69,10 @@ builder.Services.AddScoped<JwtIssuerService>();
 builder.Services.AddScoped<CryptService>();
 builder.Services.AddScoped<DatabaseSeeder>();
 builder.Services.AddScoped<IGroceryService, GroceryService>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IRoleService, RoleService>();
+builder.Services.AddScoped<IStoreService, StoreService>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();
@@ -91,6 +96,7 @@ using (var scope = app.Services.CreateScope())
 }
 
 app.UseAuthentication();
+app.UseMiddleware<RoleCheckMiddleware>();
 app.UseAuthorization();
 
 // Configure the HTTP request pipeline.
@@ -100,8 +106,6 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
-app.UseAuthorization();
 
 app.MapControllers();
 

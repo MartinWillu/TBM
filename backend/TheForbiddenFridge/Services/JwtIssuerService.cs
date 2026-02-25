@@ -10,7 +10,7 @@ namespace TheForbiddenFridge.Service;
 public class JwtIssuerService
 {
     private readonly JwtSettings _jwtSettings;
-    
+
     private const int JwtValidMinutes = 120;
 
     public JwtIssuerService(IOptions<JwtSettings> jwtSettings)
@@ -22,9 +22,9 @@ public class JwtIssuerService
     {
         var claims = new List<Claim>
         {
-            new Claim(JwtRegisteredClaimNames.Sub, userId),
-            new Claim(JwtRegisteredClaimNames.Name, username),
-            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+            new(JwtRegisteredClaimNames.Sub, userId),
+            new(JwtRegisteredClaimNames.Name, username),
+            new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
         };
         claims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));
 
