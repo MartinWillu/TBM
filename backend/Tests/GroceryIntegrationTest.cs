@@ -45,6 +45,7 @@ public class GroceryIntegrationTest
                 
             };
             db.Stores.Add(store);
+            db.SaveChanges();
         }
 
         // Category: set any required props
@@ -53,9 +54,10 @@ public class GroceryIntegrationTest
         {
             category = new Category { Name = "Test Category" };
             db.Categories.Add(category);
+            db.SaveChanges();
         }
 
-        db.SaveChanges();
+       
         return (store.Id, category.Id);
     }
 
