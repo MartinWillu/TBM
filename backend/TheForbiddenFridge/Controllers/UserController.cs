@@ -6,18 +6,19 @@ using TheForbiddenFridge.DTOs;
 using TheForbiddenFridge.Models;
 using TheForbiddenFridge.Repositories;
 using TheForbiddenFridge.Service;
+using TheForbiddenFridge.Services;
 
 namespace TheForbiddenFridge.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class UserController(IUserRepository userRepository, IRoleRepository roleRepository, CryptService cryptService) : ControllerBase
+public class UserController(IUserService userService, IRoleService roleService, CryptService cryptService) : ControllerBase
 {
     [HttpGet]
     [Authorize(Roles = "Admin")]
     public IActionResult GetAll()
     {
-        return Ok(userRepository.GetUserInfoDTOs());
+        return Ok(userService.GetAllUsers());
     }
 
 
@@ -31,12 +32,12 @@ public class UserController(IUserRepository userRepository, IRoleRepository role
             return BadRequest($"Role not available: {role}.");
         }
 
-        var targetUser = userRepository.GetById(id);
+        var targetUser = userService.GetUserById(id);
         if (targetUser == null)
         {
             return NotFound($"User with id {id} found.");
         }
-        var savedRole = roleRepository.GetRoleByName(role);
+        var savedRole = roleService.GetRoleByName(role);
         if (savedRole == null)
         {
             return NotFound($"Role with name {role} not found.");
@@ -44,7 +45,7 @@ public class UserController(IUserRepository userRepository, IRoleRepository role
 
         targetUser.Role = savedRole;
         targetUser.RoleId = savedRole.Id;
-        userRepository.Update(targetUser);
+        userService.UpdateUser(id, targetUser);
 
         return Ok($"Updated {targetUser.Username} with role {savedRole.Name}!");
     }
@@ -58,7 +59,7 @@ public class UserController(IUserRepository userRepository, IRoleRepository role
             return Unauthorized("Invalid user ID in token.");
         }
 
-        var user = userRepository.GetById(userId);
+        var user = userService.GetUserById(userId);
         if (user == null)
         {
             return NotFound("User not found.");
@@ -74,7 +75,7 @@ public class UserController(IUserRepository userRepository, IRoleRepository role
             user.Password = cryptService.HashPassword(updatedUser.Password);
         }
 
-        userRepository.Update(user);
+        userService.UpdateUser(userId, user);
         return Ok(user);
     }
 
@@ -88,13 +89,13 @@ public class UserController(IUserRepository userRepository, IRoleRepository role
             return Unauthorized("Invalid user ID in token.");
         }
 
-        var user = userRepository.GetById(userId);
+        var user = userService.GetUserById(userId);
         if (user == null)
         {
             return NotFound("User not found.");
         }
 
-        userRepository.Delete(user);
+        userService.DeleteUser(userId);
         return Ok("Deleted user account");
     }
 }
