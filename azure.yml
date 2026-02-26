@@ -44,5 +44,7 @@ properties:
     ports:
       - protocol: tcp
         port: 80
+      - protocol: tcp
+        port: 5200
 tags: { project: TBM }
 type: Microsoft.ContainerInstance/containerGroups
