@@ -39,11 +39,18 @@ public class StoreController(IStoreService storeService) : ControllerBase
         {
             return BadRequest(ModelState);
         }
+
+        var userIdClaim = User.FindFirstValue(JwtRegisteredClaimNames.Sub);
+        if (string.IsNullOrEmpty(userIdClaim))
+        {
+            return Unauthorized("User ID claim is missing or invalid.");
+        }
+
         var store = new Store
         {
             Name = storeDto.Name,
             LogoUrl = storeDto.LogoUrl ?? string.Empty,
-            UserId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!),
+            UserId = int.Parse(userIdClaim)
         };
 
         storeService.CreateStore(store);

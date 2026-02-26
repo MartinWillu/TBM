@@ -19,14 +19,8 @@ public class StoreService(IStoreRepository storeRepository, IGroceryRepository g
         return _storeRepository.GetById(id);
     }
 
-    public Store CreateStore(Store storeDto)
+    public Store CreateStore(Store store)
     {
-        var store = new Store
-        {
-            Name = storeDto.Name,
-            LogoUrl = storeDto.LogoUrl
-        };
-
         _storeRepository.Create(store);
         return store;
     }

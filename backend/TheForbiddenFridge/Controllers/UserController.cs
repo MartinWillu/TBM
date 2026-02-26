@@ -18,7 +18,7 @@ public class UserController(IUserService userService, IRoleService roleService) 
     [Authorize(Roles = "Admin")]
     public IActionResult GetAll()
     {
-        return Ok(userService.GetAllUsers());
+        return Ok(userService.GetUserDTOInfo());
     }
 
 
@@ -72,6 +72,9 @@ public class UserController(IUserService userService, IRoleService roleService) 
         {
             return NotFound(ex.Message);
         }
+
+        userService.UpdateUser(userId, user);
+        return Ok("Updated user info.");
     }
 
 
