@@ -13,7 +13,7 @@ The backend is hosted on Azure by using Container Instances.
 ## Tech Stack
 
 [![publish-frontend-docker](https://github.com/MartinWillu/TBM/actions/workflows/publish-frontend-docker.yml/badge.svg)](https://github.com/MartinWillu/TBM/actions/workflows/publish-frontend-docker.yml)
-[![test-frontend](https://github.com/MartinWillu/TBM/actions/workflows/test-frontend.yml/badge.svg)](https://github.com/MartinWillu/TBM/actions/workflows/test-frontend.yml)
+[![test-frontend](https://github.com/MartinWillu/TBM/actions/workflows/Test-frontend.yml/badge.svg)](https://github.com/MartinWillu/TBM/actions/workflows/Test-frontend.yml)
 
 - **Frontend:** Vite, React, TypeScript
 

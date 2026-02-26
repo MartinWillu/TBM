@@ -41,6 +41,7 @@ properties:
   osType: Linux
   ipAddress:
     type: Public
+    dnsNameLabel: theforbiddenfridge
     ports:
       - protocol: tcp
         port: 80
