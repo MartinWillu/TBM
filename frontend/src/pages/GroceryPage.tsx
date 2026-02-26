@@ -1,7 +1,6 @@
-import { useEffect, useState, useMemo } from "react";
+import { useState, useMemo } from "react";
 import type { Grocery, Store } from "../types";
-import { fetchGroceries, fetchStores } from "../api/fetchApi";
-import { deleteStore, deleteGrocery } from "../api/storeOwnerApi";
+import { useInventory } from "../hooks/useInventory";
 import { useNavigate, useSearchParams } from "react-router";
 import { GroceryCard } from "../components/GroceryCard";
 import { StoreCard } from "../components/StoreCard";
@@ -12,10 +11,7 @@ import { Roles } from "../types";
 
 export function GroceryPage() {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [groceries, setGroceries] = useState<Grocery[]>([]);
-  const [stores, setStores] = useState<Store[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [err, setErr] = useState<string | null>(null);
+  const { groceries, stores, loading, error: err, removeStore, updateStore, removeGrocery, updateGrocery } = useInventory();
   const navigate = useNavigate();
   const [editingStore, setEditingStore] = useState<Store | null>(null);
   const [editingGrocery, setEditingGrocery] = useState<Grocery | null>(null);
@@ -25,65 +21,23 @@ export function GroceryPage() {
 
   const selectedGroceryName = searchParams.get("groceryName");
 
-  useEffect(() => {
-    async function load() {
-      try {
-        const [groceriesData, storesData] = await Promise.all([
-          fetchGroceries(),
-          fetchStores()
-        ]);
-        setGroceries(groceriesData);
-        setStores(storesData);
-      } catch {
-        setErr("Failed to load data");
-      } finally {
-        setLoading(false);
-      }
-    }
-    load();
-  }, []);
-
-  async function handleDeleteStore(id: number) {
-    if (!window.confirm("Are you sure you want to delete this store?")) {
-      return;
-    }
-    try {
-      await deleteStore(id);
-      setStores(prev => prev.filter(s => s.id !== id));
-    } catch (e) {
-      alert(e instanceof Error ? e.message : "Failed to delete store");
-    }
-  }
-
-  async function handleUpdateStore(store: Store) {
+  function handleStartUpdateStore(store: Store) {
     setEditingStore(store);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   function handleStoreUpdated(updated: Store) {
-    setStores(prev => prev.map(s => s.id === updated.id ? updated : s));
+    updateStore(updated);
     setEditingStore(null);
   }
 
-  async function handleDeleteGrocery(id: number) {
-    if (!window.confirm("Are you sure you want to delete this grocery?")) {
-      return;
-    }
-    try {
-      await deleteGrocery(id);
-      setGroceries((prev) => prev.filter((g) => g.id !== id));
-    } catch (e) {
-      alert(e instanceof Error ? e.message : "Failed to delete grocery");
-    }
-  }
-
-  async function handleUpdateGrocery(grocery: Grocery) {
+  function handleStartUpdateGrocery(grocery: Grocery) {
     setEditingGrocery(grocery);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   function handleGroceryUpdated(updated: Grocery) {
-    setGroceries(prev => prev.map(g => g.id === updated.id ? updated : g));
+    updateGrocery(updated);
     setEditingGrocery(null);
   }
 
@@ -137,8 +91,8 @@ export function GroceryPage() {
               key={store.id}
               store={store}
               onClick={() => navigate(`/store?storeId=${store.id}`)}
-              onEdit={canManage ? () => handleUpdateStore(store) : undefined}
-              onDelete={canManage ? () => handleDeleteStore(store.id) : undefined}
+              onEdit={canManage ? () => handleStartUpdateStore(store) : undefined}
+              onDelete={canManage ? () => removeStore(store.id) : undefined}
             />
           ))}
         </div>
@@ -176,8 +130,8 @@ export function GroceryPage() {
                   key={g.id}
                   grocery={g}
                   onClick={() => setSearchParams({ groceryName: g.name })}
-                  onEdit={canManage ? () => handleUpdateGrocery(g) : undefined}
-                  onDelete={canManage ? () => handleDeleteGrocery(g.id) : undefined}
+                  onEdit={canManage ? () => handleStartUpdateGrocery(g) : undefined}
+                  onDelete={canManage ? () => removeGrocery(g.id) : undefined}
                 />
               ))}
             </div>

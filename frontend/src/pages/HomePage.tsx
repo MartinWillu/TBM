@@ -1,33 +1,12 @@
-import { useEffect, useState } from "react";
-import "../styles/HomePage.css";
-import type { Grocery, Store } from "../types";
-import { fetchGroceries, fetchStores } from "../api/fetchApi";
-import { StoreCard } from "../components/StoreCard";
-import { GroceryCard } from "../components/GroceryCard";
 import { useNavigate } from "react-router";
+import { useInventory } from "../hooks/useInventory";
+import { GroceryCard } from "../components/GroceryCard";
+import { StoreCard } from "../components/StoreCard";
+import "../styles/HomePage.css";
 
 export function HomePage() {
-  const [stores, setStores] = useState<Store[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [err, setErr] = useState<string | null>(null);
-  const [groceriesData, setGroceriesData] = useState<Grocery[]>([]);
+  const { stores, groceries, loading, error } = useInventory();
   const navigate = useNavigate();
-
-  useEffect(() => {
-    async function load() {
-      try {
-        const storesData = await fetchStores();
-        setStores(storesData);
-        const groceries = await fetchGroceries();
-        setGroceriesData(groceries);
-      } catch {
-        setErr("Failed to load stores");
-      } finally {
-        setLoading(false);
-      }
-    }
-    load();
-  }, []);
 
   return (
     <>
@@ -41,9 +20,9 @@ export function HomePage() {
       <div className="container">
         <main>
           {loading && <p className="text-center">Loading stores...</p>}
-          {!loading && err && <p className="error">{err}</p>}
+          {!loading && error && <p className="error">{error}</p>}
 
-          {!loading && !err && (
+          {!loading && !error && (
             <section className="home-container">
               <div className="home-column">
                 <h2 className="home-section-title">Stores</h2>
@@ -60,9 +39,9 @@ export function HomePage() {
 
               <div className="home-column">
                 <h2 className="home-section-title">All Groceries</h2>
-                {groceriesData.length === 0 && <p className="text-center">No groceries yet.</p>}
+                {groceries.length === 0 && <p className="text-center">No groceries yet.</p>}
                 <div className="card-grid">
-                  {groceriesData.map((g) => (
+                  {groceries.map((g) => (
                     <GroceryCard
                       key={g.id}
                       grocery={g}

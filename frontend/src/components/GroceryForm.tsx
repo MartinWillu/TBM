@@ -88,7 +88,9 @@ export function GroceryForm({ storeId, onGroceryCreated, onGroceryUpdated, onCan
                     storeId: initialGrocery.storeId,
                     categoryId,
                 });
-                if (onGroceryUpdated) onGroceryUpdated(updated);
+                if (onGroceryUpdated) {
+                    onGroceryUpdated(updated);
+                }
             } else {
                 const created = await createGrocery({
                     name,
@@ -99,7 +101,9 @@ export function GroceryForm({ storeId, onGroceryCreated, onGroceryUpdated, onCan
                     storeId,
                     categoryId,
                 });
-                if (onGroceryCreated) onGroceryCreated(created);
+                if (onGroceryCreated) {
+                    onGroceryCreated(created);
+                }
                 setFormData({
                     name: "",
                     currentPrice: "",

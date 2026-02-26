@@ -26,8 +26,12 @@ export function GroceryCard({ grocery, onClick, className, onEdit, onDelete }: P
       tabIndex={onClick ? 0 : -1}
       onClick={onClick}
       onKeyDown={(e) => {
-        if (!onClick) return;
-        if (e.key === "Enter" || e.key === " ") onClick();
+        if (!onClick) {
+          return;
+        }
+        if (e.key === "Enter" || e.key === " ") {
+          onClick();
+        }
       }}
       className={`card ${className ?? ""}`}
       style={{ position: 'relative' }}
