@@ -9,7 +9,7 @@ public class RoleCheckMiddleware(RequestDelegate next)
     {
         if (context.User.Identity is { IsAuthenticated: true })
         {
-            var userIdClaim = context.User.FindFirst(ClaimTypes.NameIdentifier);
+            var userIdClaim = context.User.FindFirst(ClaimTypes.NameIdentifier) ?? context.User.FindFirst("sub");
 
             if (userIdClaim != null && int.TryParse(userIdClaim.Value, out var userId))
             {
