@@ -197,7 +197,7 @@ public class GroceryController(IGroceryService groceryService) : ControllerBase
 
             if (!_groceryService.UserOwnsStore(storeId, userId))
             {
-                return Forbid(errorMessage ?? "You do not have permission to modify this store's groceries");
+                return StatusCode(403, errorMessage ?? "You do not have permission to modify this store's groceries");
             }
         }
         return null;
