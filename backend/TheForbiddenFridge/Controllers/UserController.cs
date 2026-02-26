@@ -27,7 +27,7 @@ public class UserController(IUserService userService, IRoleService roleService) 
     public IActionResult Patch(int id, string role)
     {
         var availableRoles = new List<string>() { "Admin", "StoreOwner", "User" };
-        if (availableRoles.Find(r => r == role) != null)
+        if (availableRoles.Find(r => string.Equals(r, role)) == null)
         {
             return BadRequest($"Role not available: {role}.");
         }
