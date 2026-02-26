@@ -72,9 +72,6 @@ public class UserController(IUserService userService, IRoleService roleService) 
         {
             return NotFound(ex.Message);
         }
-
-        userService.UpdateUser(userId, user);
-        return Ok("Updated user info.");
     }
 
 
