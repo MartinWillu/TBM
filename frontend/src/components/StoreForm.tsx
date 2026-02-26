@@ -80,15 +80,6 @@ export function StoreForm({ onStoreCreated, onStoreUpdated, onCancel, initialSto
 
     return (
         <div style={{ position: 'relative' }}>
-            {isEditMode && onCancel && (
-                <button
-                    type="button"
-                    onClick={onCancel}
-                    style={{ position: 'absolute', right: 0, top: 0, padding: '4px 8px', fontSize: '12px' }}
-                >
-                    Cancel Edit
-                </button>
-            )}
             <GenericForm
                 title={isEditMode ? "Edit Store" : "Create New Store"}
                 submitLabel={isEditMode ? "Save Changes" : "Create Store"}
@@ -107,6 +98,16 @@ export function StoreForm({ onStoreCreated, onStoreUpdated, onCancel, initialSto
                         onChange={handleChange}
                     />
                 ))}
+                {isEditMode && onCancel && (
+                    <button
+                        type="button"
+                        className="form-input"
+                        onClick={onCancel}
+                        style={{ zIndex: 999 }}
+                    >
+                        Cancel Edit
+                    </button>
+                )}
             </GenericForm>
         </div>
     );

@@ -114,15 +114,6 @@ export function GroceryForm({ storeId, onGroceryCreated, onGroceryUpdated, onCan
 
     return (
         <div style={{ position: 'relative' }}>
-            {isEditMode && onCancel && (
-                <button
-                    type="button"
-                    onClick={onCancel}
-                    style={{ position: 'absolute', right: 0, top: 0, padding: '4px 8px', fontSize: '12px' }}
-                >
-                    Cancel Edit
-                </button>
-            )}
             <GenericForm
                 title={isEditMode ? "Edit Grocery" : "Add New Grocery"}
                 submitLabel={isEditMode ? "Save Changes" : "Add Grocery"}
@@ -143,6 +134,16 @@ export function GroceryForm({ storeId, onGroceryCreated, onGroceryUpdated, onCan
                         step={field.step}
                     />
                 ))}
+                {isEditMode && onCancel && (
+                    <button
+                        type="button"
+                        className="form-input"
+                        onClick={onCancel}
+                        style={{ zIndex: 999 }}
+                    >
+                        Cancel Edit
+                    </button>
+                )}
             </GenericForm>
         </div>
     );
