@@ -105,11 +105,16 @@ public class StoreController(IStoreService storeService) : ControllerBase
         return NoContent();
     }
 
-    private ForbidResult? ValidateStoreOwnership(int storeOwnerId)
+    private IActionResult? ValidateStoreOwnership(int storeOwnerId)
     {
         if (User.IsInRole("StoreOwner"))
         {
-            var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+            var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? User.FindFirstValue("sub");
+            if (string.IsNullOrEmpty(userIdString) || !int.TryParse(userIdString, out var userId))
+            {
+                return Unauthorized("User ID not found in token");
+            }
+
             if (storeOwnerId != userId)
             {
                 return Forbid("You do not have permission to modify this store");

@@ -185,11 +185,16 @@ public class GroceryController(IGroceryService groceryService) : ControllerBase
         }
     }
 
-    private ForbidResult? ValidateStoreOwnership(int storeId, string? errorMessage = null)
+    private IActionResult? ValidateStoreOwnership(int storeId, string? errorMessage = null)
     {
         if (User.IsInRole("StoreOwner"))
         {
-            var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+            var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? User.FindFirstValue("sub");
+            if (string.IsNullOrEmpty(userIdString) || !int.TryParse(userIdString, out var userId))
+            {
+                return Unauthorized("User ID not found in token");
+            }
+
             if (!_groceryService.UserOwnsStore(storeId, userId))
             {
                 return Forbid(errorMessage ?? "You do not have permission to modify this store's groceries");
