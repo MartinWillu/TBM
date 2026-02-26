@@ -53,3 +53,45 @@ export async function createGrocery(
   }
   return (await response.json()) as Grocery;
 }
+
+export async function deleteStore(id: number): Promise<void> {
+  const authReq = CreateAuthRequest({ method: "DELETE" });
+  if (!authReq) throw new Error("Missing JWT token!");
+  const response = await fetch(`api/store/${id}`, authReq);
+  if (!response.ok) throw new Error(await response.text());
+}
+
+export async function updateStore(
+  id: number,
+  payload: CreateStorePayload
+): Promise<Store> {
+  const authReq = CreateAuthRequest({ method: "PUT" });
+  if (!authReq) throw new Error("Missing JWT token!");
+  authReq.headers = { ...authReq.headers, "Content-Type": "application/json" };
+  authReq.body = JSON.stringify(payload);
+
+  const response = await fetch(`api/store/${id}`, authReq);
+  if (!response.ok) throw new Error(await response.text());
+  return (await response.json()) as Store;
+}
+
+export async function deleteGrocery(id: number): Promise<void> {
+  const authReq = CreateAuthRequest({ method: "DELETE" });
+  if (!authReq) throw new Error("Missing JWT token!");
+  const response = await fetch(`api/grocery/${id}`, authReq);
+  if (!response.ok) throw new Error(await response.text());
+}
+
+export async function updateGrocery(
+  id: number,
+  payload: CreateGroceryPayload
+): Promise<Grocery> {
+  const authReq = CreateAuthRequest({ method: "PUT" });
+  if (!authReq) throw new Error("Missing JWT token!");
+  authReq.headers = { ...authReq.headers, "Content-Type": "application/json" };
+  authReq.body = JSON.stringify(payload);
+
+  const response = await fetch(`api/grocery/${id}`, authReq);
+  if (!response.ok) throw new Error(await response.text());
+  return (await response.json()) as Grocery;
+}
