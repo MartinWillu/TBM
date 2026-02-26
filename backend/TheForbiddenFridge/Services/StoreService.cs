@@ -4,9 +4,7 @@ using TheForbiddenFridge.Repositories;
 
 namespace TheForbiddenFridge.Services;
 
-public class StoreService(
-    IStoreRepository storeRepository,
-    IGroceryRepository groceryRepository) : IStoreService
+public class StoreService(IStoreRepository storeRepository, IGroceryRepository groceryRepository) : IStoreService
 {
     private readonly IStoreRepository _storeRepository = storeRepository;
     private readonly IGroceryRepository _groceryRepository = groceryRepository;
