@@ -26,12 +26,11 @@ public class UserController(IUserService userService, IRoleService roleService) 
     [Authorize(Roles = "Admin")]
     public IActionResult Patch(int id, string role)
     {
-        var availableRoles = new List<string>() { "1", "2", "3" };
+        var availableRoles = new List<string>() { "Admin", "StoreOwner", "User" };
         if (availableRoles.Find(r => r == role) != null)
         {
             return BadRequest($"Role not available: {role}.");
         }
-
         var targetUser = userService.GetUserById(id);
         if (targetUser == null)
         {
