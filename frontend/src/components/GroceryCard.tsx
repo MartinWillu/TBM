@@ -6,9 +6,11 @@ type Props = {
   grocery: Grocery;
   onClick?: () => void;
   className?: string;
+  onEdit?: (grocery: Grocery) => void;
+  onDelete?: (id: number) => void;
 };
 
-export function GroceryCard({ grocery, onClick, className }: Props) {
+export function GroceryCard({ grocery, onClick, className, onEdit, onDelete }: Props) {
   const sale = isOnSale(grocery);
   const hasImage = Boolean(grocery.imageUrl);
 
@@ -65,6 +67,13 @@ export function GroceryCard({ grocery, onClick, className }: Props) {
           Quantity: {grocery.quantity}
         </div>
       </div>
+
+      {(onEdit || onDelete) && (
+        <div style={{ marginTop: '1rem', display: 'flex', gap: '8px', zIndex: 10 }} onClick={(e) => e.stopPropagation()}>
+          {onEdit && <button onClick={() => onEdit(grocery)}>Edit</button>}
+          {onDelete && <button onClick={() => onDelete(grocery.id)} style={{ backgroundColor: '#ff4444' }}>Delete</button>}
+        </div>
+      )}
     </div>
   );
 }
