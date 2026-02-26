@@ -53,7 +53,8 @@ public class UserController(IUserService userService, IRoleService roleService) 
     [Authorize(Roles = "Admin, StoreOwner, User")]
     public IActionResult Put([FromBody] UserUpdateDTO updatedUser)
     {
-        if (!int.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out var userId))
+        var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? User.FindFirstValue("sub");
+        if (string.IsNullOrEmpty(userIdString) || !int.TryParse(userIdString, out var userId))
         {
             return Unauthorized("Invalid user ID in token.");
         }
@@ -78,7 +79,8 @@ public class UserController(IUserService userService, IRoleService roleService) 
     [Authorize(Roles = "Admin, StoreOwner, User")]
     public IActionResult Delete()
     {
-        if (!int.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out var userId))
+        var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? User.FindFirstValue("sub");
+        if (string.IsNullOrEmpty(userIdString) || !int.TryParse(userIdString, out var userId))
         {
             return Unauthorized("Invalid user ID in token.");
         }
