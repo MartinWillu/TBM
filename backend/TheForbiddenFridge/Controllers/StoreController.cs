@@ -117,7 +117,7 @@ public class StoreController(IStoreService storeService) : ControllerBase
 
             if (storeOwnerId != userId)
             {
-                return Forbid("You do not have permission to modify this store");
+                return StatusCode(403, "You do not have permission to modify this store");
             }
         }
         return null;
