@@ -1,24 +1,8 @@
-apiVersion: 2026-02-25
-location: norwayeast
+apiVersion: 2025-09-01
+location: germanynorth
 name: tbm-container-group
 properties:
   containers:
-    - name: postgres
-      properties:
-        image: postgres:latest
-        environmentVariables:
-          - name: POSTGRES_DB
-            value: ${POSTGRES_DB}
-          - name: POSTGRES_USER
-            value: ${POSTGRES_USER}
-          - name: POSTGRES_PASSWORD
-            secureValue: ${POSTGRES_PASSWORD}
-        resources:
-          requests:
-            cpu: 1
-            memoryInGb: 1.5
-        ports:
-          - port: 5432
     - name: backend
       properties:
         image: ghcr.io/martinwillu/tbm/backend:main
@@ -30,9 +14,9 @@ properties:
           - name: DatabasePassword
             secureValue: ${POSTGRES_PASSWORD}
           - name: DatabasePort
-            value: 5432
+            value: ${POSTGRES_PORT}
           - name: DatabaseHost
-            value: localhost
+            value: ${POSTGRES_HOST}
           - name: Jwt__Secret
             secureValue: ${JWT_SECRET}
           - name: AdminPassword
